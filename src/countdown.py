@@ -24,3 +24,6 @@ class Timer:
 
     def start(self):
         pyglet.clock.schedule_interval(self.update, 1)
+
+    def interrupt(self):
+        pass

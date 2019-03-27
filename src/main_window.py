@@ -20,6 +20,10 @@ background = pyglet.image.load("gfx\\Table.png")
 def on_key_press(symbol, modifiers):
     if symbol == key.SPACE:
         timer.start()
+    elif symbol == key.LEFT:
+        team1.set_name(input("Type team's 1 name: "))
+    elif symbol == key.RIGHT:
+        team2.set_name(input("Type team's 2 name: "))
 
 
 @main_window.event

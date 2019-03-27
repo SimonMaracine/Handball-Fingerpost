@@ -18,3 +18,6 @@ class Team:
                                   x=score_x, y=score_y)
         name.draw()
         score.draw()
+
+    def set_name(self, name):
+        self.name = name
