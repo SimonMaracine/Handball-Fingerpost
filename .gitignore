@@ -1,0 +1,4 @@
+# Ignoring some files.
+.idea/workspace.xml
+*.pyc
+*.exe
