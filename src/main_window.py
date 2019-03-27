@@ -1,3 +1,4 @@
+import os
 import pyglet
 from pyglet.window import key, mouse
 
@@ -10,6 +11,9 @@ main_window = pyglet.window.Window(WIDTH, HEIGHT, "Fingerpost")
 timer = countdown.Timer(main_window.width//2 - 70, main_window.height//2 + 220, 50)
 team1 = team.Team("Home", None)
 team2 = team.Team("Guest", None)
+cwd = os.getcwd()
+os.chdir(cwd[:len(cwd) - 3])
+background = pyglet.image.load("gfx\\Table.png")
 
 
 @main_window.event
@@ -35,6 +39,7 @@ def update(dt):
 @main_window.event
 def on_draw():
     main_window.clear()
+    background.blit(0, 0)
     timer.render()
     team1.render(30, HEIGHT - 100, 70, HEIGHT - 180)
     team2.render(WIDTH - 160, HEIGHT - 100, WIDTH - 95, HEIGHT - 180)
