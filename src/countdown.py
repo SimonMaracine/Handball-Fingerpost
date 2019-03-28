@@ -8,9 +8,11 @@ class Timer:
         self.size = size
         self.time = time
         self.countdown = self.time
+        self.running = False  # for 'starting' the timer only once
+        self.finished = False
 
     def render(self):
-        timer = pyglet.text.Label("{}:00".format(self.countdown),
+        timer = pyglet.text.Label("00:{:02d}".format(self.countdown),
                                   font_name="Calibri",
                                   font_size=self.size,
                                   x=self.x, y=self.y)
@@ -20,10 +22,21 @@ class Timer:
         if self.countdown > 0:
             self.countdown -= 1
         else:
-            print("Time's up.")
+            self.finished = True
+            pyglet.clock.unschedule(self.update)
+            print("Time's up!")
 
     def start(self):
-        pyglet.clock.schedule_interval(self.update, 1)
+        if not self.running:
+            pyglet.clock.schedule_interval(self.update, 1)
+            self.running = True
+
+    def set_time(self, time=20):
+        self.countdown = time
+        self.finished = False
+        self.running = False
+        pyglet.clock.unschedule(self.update)
 
     def interrupt(self):
-        pass
+        pyglet.clock.unschedule(self.update)
+        self.running = False
