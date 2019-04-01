@@ -9,8 +9,8 @@ WIDTH = 800
 HEIGHT = 600
 main_window = pyglet.window.Window(WIDTH, HEIGHT, "Handball Fingerpost")
 fps = pyglet.clock.ClockDisplay()
-timer = countdown.Timer(WIDTH//2 - 92, HEIGHT//2 + 180, 60)
-time_out = None
+timer = countdown.Timer(WIDTH//2 - 92, HEIGHT//2 + 180, 60, 60 * 20)  # main timer
+time_out = None  # time-out timer
 game_round = 1
 team1 = team.Team("Home", None)
 team2 = team.Team("Guest", None)
@@ -39,11 +39,15 @@ def on_key_press(symbol, modifiers):
         team1.score_up()
     elif symbol == key.D:
         team2.score_up()
+    elif symbol == key.Z:
+        team1.score_down()
+    elif symbol == key.C:
+        team2.score_down()
     elif symbol == key.ENTER and timer.finished:
         game_round += 1
         timer.set_time()
     elif symbol == key.T and time_out is None and timer.running:
-        time_out = countdown.Timer(WIDTH//2 - 80, HEIGHT//2 + 140, 50, 3)
+        time_out = countdown.Timer(WIDTH//2 - 82, HEIGHT//2 + 185, 55, 60)  # 1 minute countdown
         timer.interrupt()
         time_out.start()
 
@@ -56,11 +60,10 @@ def on_mouse_press(x, y, button, modifiers):
 
 # def init():
 #     pass
-#
-#
+
+
 def update(dt):
     global time_out
-    print(0)
     if time_out is not None and time_out.finished:
         time_out = None
         timer.start()
@@ -70,7 +73,8 @@ def update(dt):
 def on_draw():
     main_window.clear()
     background.blit(0, 0)
-    timer.render()
+    if time_out is None:
+        timer.render()
     if time_out is not None:
         time_out.render()
     team1.render(30, HEIGHT - 130, 110, 350)

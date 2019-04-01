@@ -1,8 +1,9 @@
+# import time
 import pyglet
 
 
 class Timer:
-    def __init__(self, x, y, size, time=20):
+    def __init__(self, x, y, size, time=1200):
         self.x = x
         self.y = y
         self.size = size
@@ -11,8 +12,15 @@ class Timer:
         self.running = False  # for 'starting' the timer only once
         self.finished = False
 
+    @staticmethod
+    def show(countdown) -> str:
+        minutes = countdown // 60
+        seconds = countdown % 60
+        time = "{:02d}:{:02d}".format(minutes, seconds)
+        return time
+
     def render(self):
-        timer = pyglet.text.Label("00:{:02d}".format(self.countdown),
+        timer = pyglet.text.Label(__class__.show(self.countdown),
                                   font_name="Calibri",
                                   font_size=self.size,
                                   x=self.x, y=self.y)
@@ -28,10 +36,10 @@ class Timer:
 
     def start(self):
         if not self.running:
-            pyglet.clock.schedule_interval(self.update, 1)
+            pyglet.clock.schedule_interval(self.update, 0.5)
             self.running = True
 
-    def set_time(self, time=20):
+    def set_time(self, time=1200):
         self.countdown = time
         self.finished = False
         self.running = False
