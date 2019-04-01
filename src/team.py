@@ -8,6 +8,7 @@ class Team:
         self.score = 0
         self.team_name = None
         self.team_score = None
+        # self.team_players = None
 
     def render(self, name_x, name_y, score_x, score_y):
         self.team_name = pyglet.text.Label(self.name,
@@ -18,6 +19,10 @@ class Team:
                                             font_name="Calibri",
                                             font_size=50,
                                             x=score_x, y=score_y)
+        # self.team_players = pyglet.text.Label("",
+        #                                     font_name="Calibri",
+        #                                     font_size=50,
+        #                                     x=score_x, y=score_y)
         self.team_name.draw()
         self.team_score.draw()
 

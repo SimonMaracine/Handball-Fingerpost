@@ -5,6 +5,7 @@
       <option name="ignoredNames">
         <list>
           <option value="round" />
+          <option value="id" />
         </list>
       </option>
     </inspection_tool>
