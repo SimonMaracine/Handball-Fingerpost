@@ -8,13 +8,17 @@ class Player:
         self.id = id
         self.suspended = False
         self.button = None
+        self.player = pyglet.text.Label("{}[{}]".format(self.name, self.id),
+                                        font_name="Calibri",
+                                        font_size=20)
 
     def render(self, x, y):
-        player = pyglet.text.Label("{}[{}]".format(self.name, self.id),
-                                   font_name="Calibri",
-                                   font_size=20,
-                                   x=x, y=y)
-        player.draw()
+        self.update(x, y)
+        self.player.draw()
+
+    def update(self, x, y):
+        self.player.x = x
+        self.player.y = y
 
     def suspend(self):
         self.suspended = True

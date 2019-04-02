@@ -18,8 +18,8 @@ game_round = 1
 
 players1 = [Player("Simon", 1), Player("Teodor", 2), Player("player3", 3)]
 players2 = [Player("player1", 4), Player("player2", 5), Player("player3", 6), Player("player4", 7)]
-team1 = team.Team("Home", players1)
-team2 = team.Team("Guest", players2)
+team1 = team.Team("Home", players1, 30, HEIGHT - 130, 110, 350)
+team2 = team.Team("Guest", players2, 565, HEIGHT - 130, 590, 350)
 
 button1 = Button(360, 60, "first button", 14)
 buttons = (button1,)
@@ -107,14 +107,16 @@ def update(dt):
         player.update_button(32, (-i + 8) * 25)
     for i, player in enumerate(players2):
         player.update_button(WIDTH - 278, (-i + 8) * 25)
+    team1.update()
+    team2.update()
 
 
 @main_window.event
 def on_draw():
     main_window.clear()
     background.blit(0, 0)
-    team1.render(30, HEIGHT - 130, 110, 350)
-    team2.render(565, HEIGHT - 130, 590, 350)
+    team1.render()
+    team2.render()
     show_timers()
     show_round()
     show_players(players1, "first")

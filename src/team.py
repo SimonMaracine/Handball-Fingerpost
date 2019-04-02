@@ -2,15 +2,10 @@ import pyglet
 
 
 class Team:
-    def __init__(self, name, players):
+    def __init__(self, name, players, name_x, name_y, score_x, score_y):
         self.name = name
         self.players = players
         self.score = 0
-        self.team_name = None
-        self.team_score = None
-        # self.team_players = None
-
-    def render(self, name_x, name_y, score_x, score_y):
         self.team_name = pyglet.text.Label(self.name,
                                            font_name="Calibri",
                                            font_size=40,
@@ -19,8 +14,14 @@ class Team:
                                             font_name="Calibri",
                                             font_size=50,
                                             x=score_x, y=score_y)
+
+    def render(self):
         self.team_name.draw()
         self.team_score.draw()
+
+    def update(self):
+        self.team_name.text = self.name
+        self.team_score.text = str(self.score)
 
     def set_name(self, name):
         self.name = name

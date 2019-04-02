@@ -10,6 +10,10 @@ class Timer:
         self.countdown = self.time
         self.running = False  # for 'starting' the timer only once
         self.finished = False
+        self.timer = pyglet.text.Label(__class__.show(self.countdown),
+                                       font_name="Calibri",
+                                       font_size=self.size,
+                                       x=self.x, y=self.y)
 
     @staticmethod
     def show(countdown) -> str:
@@ -19,13 +23,10 @@ class Timer:
         return time
 
     def render(self):
-        timer = pyglet.text.Label(__class__.show(self.countdown),
-                                  font_name="Calibri",
-                                  font_size=self.size,
-                                  x=self.x, y=self.y)
-        timer.draw()
+        self.timer.draw()
 
     def update(self, dt):
+        self.timer.text = __class__.show(self.countdown)
         if self.countdown > 0:
             self.countdown -= 1
         else:
