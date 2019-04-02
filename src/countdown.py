@@ -41,10 +41,16 @@ class Timer:
 
     def set_time(self, time=1200):
         self.countdown = time
+        self.timer.text = __class__.show(self.countdown)
         self.finished = False
-        self.running = False
-        pyglet.clock.unschedule(self.update)
+        self.interrupt()
 
     def interrupt(self):
         pyglet.clock.unschedule(self.update)
         self.running = False
+
+    def restart(self):
+        self.countdown = self.time
+        self.timer.text = __class__.show(self.countdown)
+        self.finished = False
+        self.interrupt()

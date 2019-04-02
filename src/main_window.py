@@ -9,11 +9,17 @@ from button import Button
 
 WIDTH = 800
 HEIGHT = 600
-main_window = pyglet.window.Window(WIDTH, HEIGHT, "Handball Fingerpost", vsync=False)
+main_window = pyglet.window.Window(WIDTH, HEIGHT, "Handball Fingerpost", vsync=False, visible=False)
 fps = pyglet.clock.ClockDisplay()
+cwd = os.getcwd()
+os.chdir(cwd[:len(cwd) - 3])  # todo this isn't quite right
+
+icon2 = pyglet.image.load("gfx\\icon2.png")
+main_window.set_icon(icon2)
+main_window.set_visible(True)
 
 timer = countdown.Timer(WIDTH//2 - 92, HEIGHT//2 + 180, 60, 60 * 20)  # main timer
-time_out = None  # time-out timer
+time_out_timer = None  # time-out timer
 game_round = 1
 
 players1 = [Player("Simon", 1), Player("Teodor", 2), Player("player3", 3)]
@@ -24,9 +30,7 @@ team2 = team.Team("Guest", players2, 565, HEIGHT - 130, 590, 350)
 button1 = Button(360, 60, "first button", 14)
 buttons = (button1,)
 
-cwd = os.getcwd()
-os.chdir(cwd[:len(cwd) - 3])  # todo this isn't quite right
-background = pyglet.image.load("gfx\\Table.png")
+background = pyglet.image.load("gfx\\table2.png")
 
 
 def show_round():
@@ -49,17 +53,20 @@ def show_buttons():
 
 
 def show_timers():
-    if time_out is None:
+    if time_out_timer is None:
         timer.render()
-    if time_out is not None:
-        time_out.render()
+    if time_out_timer is not None:
+        time_out_timer.render()
 
 
 @main_window.event
 def on_key_press(symbol, modifiers):
-    global game_round, time_out
-    if symbol == key.SPACE and time_out is None:
-        timer.start()
+    global game_round, time_out_timer
+    if symbol == key.SPACE and time_out_timer is None:
+        if not timer.running:
+            timer.start()
+        else:
+            timer.interrupt()
     elif symbol == key.LEFT:
         team1.set_name(input("Type first team's name: "))
     elif symbol == key.RIGHT:
@@ -76,11 +83,19 @@ def on_key_press(symbol, modifiers):
         team2.score_down()
     elif symbol == key.ENTER and timer.finished:
         game_round += 1
-        timer.set_time()
-    elif symbol == key.T and time_out is None and timer.running:
-        time_out = countdown.Timer(WIDTH//2 - 82, HEIGHT//2 + 185, 55, 60)  # 1 minute countdown
-        timer.interrupt()
-        time_out.start()
+        timer.restart()
+    elif symbol == key.T:
+        if timer.running:
+            time_out_timer = countdown.Timer(WIDTH//2 - 82, HEIGHT//2 + 185, 55, 60)  # 1 minute countdown
+            timer.interrupt()
+        if time_out_timer is not None:
+            if not time_out_timer.running:
+                time_out_timer.start()
+            else:
+                time_out_timer.interrupt()
+    elif symbol == key.R:
+        timer.restart()
+        time_out_timer = None
 
 
 @main_window.event
@@ -99,9 +114,9 @@ def init():
 
 
 def update(dt):
-    global time_out
-    if time_out is not None and time_out.finished:
-        time_out = None
+    global time_out_timer
+    if time_out_timer is not None and time_out_timer.finished:
+        time_out_timer = None
         timer.start()
     for i, player in enumerate(players1):
         player.update_button(32, (-i + 8) * 25)
@@ -125,5 +140,5 @@ def on_draw():
     fps.draw()
 
 
-pyglet.clock.schedule_interval(update, 1/120)
-pyglet.clock.set_fps_limit(120)
+pyglet.clock.schedule_interval(update, 1/60)
+pyglet.clock.set_fps_limit(60)
