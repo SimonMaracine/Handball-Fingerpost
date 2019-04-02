@@ -11,6 +11,7 @@ class Player:
         self.player = pyglet.text.Label("{}[{}]".format(self.name, self.id),
                                         font_name="Calibri",
                                         font_size=20)
+        self.selected = False
 
     def render(self, x, y):
         self.update(x, y)
@@ -23,8 +24,13 @@ class Player:
     def suspend(self):
         self.suspended = True
 
-    def pressed(self):
-        pass
+    def select(self):
+        if not self.selected:
+            self.player.color = (140, 16, 140, 255)
+            self.selected = True
+        else:
+            self.player.color = (255, 255, 255, 255)
+            self.selected = False
 
     def update_button(self, x, y):
         self.button = Button(x, y, "{}[{}]".format(self.name, self.id), 20)

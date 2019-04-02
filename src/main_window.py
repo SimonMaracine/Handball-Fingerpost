@@ -105,9 +105,10 @@ def on_mouse_press(x, y, button, modifiers):
         player_buttons = list(map(lambda player: player.get_button(), players1 + players2))
         print('The left mouse button was pressed at ({}, {}).'.format(x, y))
 
-        for i, button in enumerate(player_buttons):
-            if button.pressed(x, y):
+        for i, btn in enumerate(player_buttons):
+            if btn.pressed(x, y):
                 print("player {}".format(i + 1))
+                (players1 + players2)[i].select()
 
 
 def init():
