@@ -14,8 +14,9 @@ fps = pyglet.clock.ClockDisplay()
 cwd = os.getcwd()
 os.chdir(cwd[:len(cwd) - 3])  # todo this isn't quite right
 
+icon1 = pyglet.image.load("gfx\\icon1.png")
 icon2 = pyglet.image.load("gfx\\icon2.png")
-main_window.set_icon(icon2)
+main_window.set_icon(icon1, icon2)
 main_window.set_visible(True)
 
 timer = countdown.Timer(WIDTH//2 - 92, HEIGHT//2 + 180, 60, 60 * 20)  # main timer

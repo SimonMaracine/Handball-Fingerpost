@@ -1,9 +1,9 @@
 import pyglet
-from main_window import WIDTH, HEIGHT, icon2, \
+from main_window import WIDTH, HEIGHT, icon1, icon2, \
     team1, team2, players1, players2, show_round, show_players, show_timers
 
 second_window = pyglet.window.Window(WIDTH, HEIGHT, "Handball Fingerpost (second)", vsync=False)
-second_window.set_icon(icon2)
+second_window.set_icon(icon1, icon2)
 second_window.set_visible(True)
 background = pyglet.image.load("gfx\\table2.png")
 
