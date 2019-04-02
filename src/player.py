@@ -15,10 +15,15 @@ class Player:
                                    font_size=20,
                                    x=x, y=y)
         player.draw()
-        self.button = Button(x, y, self.name, 20)
 
     def suspend(self):
         self.suspended = True
 
     def pressed(self):
         pass
+
+    def update_button(self, x, y):
+        self.button = Button(x, y, "{}[{}]".format(self.name, self.id), 20)
+
+    def get_button(self):
+        return self.button

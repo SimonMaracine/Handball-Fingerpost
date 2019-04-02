@@ -9,7 +9,7 @@ from button import Button
 
 WIDTH = 800
 HEIGHT = 600
-main_window = pyglet.window.Window(WIDTH, HEIGHT, "Handball Fingerpost")
+main_window = pyglet.window.Window(WIDTH, HEIGHT, "Handball Fingerpost", vsync=False)
 fps = pyglet.clock.ClockDisplay()
 
 timer = countdown.Timer(WIDTH//2 - 92, HEIGHT//2 + 180, 60, 60 * 20)  # main timer
@@ -17,13 +17,12 @@ time_out = None  # time-out timer
 game_round = 1
 
 players1 = [Player("Simon", 1), Player("Teodor", 2), Player("player3", 3)]
-players2 = [Player("player1", 4), Player("player2", 5), Player("player3", 6)]
+players2 = [Player("player1", 4), Player("player2", 5), Player("player3", 6), Player("player4", 7)]
 team1 = team.Team("Home", players1)
 team2 = team.Team("Guest", players2)
 
 button1 = Button(360, 60, "first button", 14)
 buttons = (button1,)
-
 
 cwd = os.getcwd()
 os.chdir(cwd[:len(cwd) - 3])  # todo this isn't quite right
@@ -37,16 +36,23 @@ def show_round():
 
 def show_players(players, team):
     if team == "first":
-        x = 16
+        x = 32
     else:
-        x = WIDTH - 216
-    for i, player in enumerate(reversed(players)):
-        player.render(x, (i+11)*25)
+        x = WIDTH - 278
+    for i, player in enumerate(players):
+        player.render(x, (-i + 8) * 25)
 
 
 def show_buttons():
     for button in buttons:
-        button.show_text()
+        button.render()
+
+
+def show_timers():
+    if time_out is None:
+        timer.render()
+    if time_out is not None:
+        time_out.render()
 
 
 @main_window.event
@@ -80,17 +86,16 @@ def on_key_press(symbol, modifiers):
 @main_window.event
 def on_mouse_press(x, y, button, modifiers):
     if button == mouse.LEFT:
+        player_buttons = list(map(lambda player: player.get_button(), players1 + players2))
         print('The left mouse button was pressed at ({}, {}).'.format(x, y))
-        if buttons[0].pressed(x, y):
-            print("button 1")
-        # elif buttons[1].pressed(x, y):
-        #     pass
-        # elif buttons[2].pressed(x, y):
-        #     pass
+
+        for i, button in enumerate(player_buttons):
+            if button.pressed(x, y):
+                print("player {}".format(i + 1))
 
 
-# def init():
-#     pass
+def init():
+    pass
 
 
 def update(dt):
@@ -98,18 +103,19 @@ def update(dt):
     if time_out is not None and time_out.finished:
         time_out = None
         timer.start()
+    for i, player in enumerate(players1):
+        player.update_button(32, (-i + 8) * 25)
+    for i, player in enumerate(players2):
+        player.update_button(WIDTH - 278, (-i + 8) * 25)
 
 
 @main_window.event
 def on_draw():
     main_window.clear()
     background.blit(0, 0)
-    if time_out is None:
-        timer.render()
-    if time_out is not None:
-        time_out.render()
     team1.render(30, HEIGHT - 130, 110, 350)
     team2.render(565, HEIGHT - 130, 590, 350)
+    show_timers()
     show_round()
     show_players(players1, "first")
     show_players(players2, "second")
@@ -117,4 +123,5 @@ def on_draw():
     fps.draw()
 
 
-pyglet.clock.schedule_interval(update, 1/60)
+pyglet.clock.schedule_interval(update, 1/120)
+pyglet.clock.set_fps_limit(120)

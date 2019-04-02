@@ -7,10 +7,11 @@ class Button:
         self.y = y
         self.text = text
         self.size = size
-        self.width = len(self.text) * (self.size//2)
+        self.width = len(self.text) * (self.size // 2)
 
     def render(self):
-        pass
+        # some image or something graphical here
+        self.show_text()
 
     def show_text(self):
         text = pyglet.text.Label(self.text, font_name="Calibri", font_size=self.size,

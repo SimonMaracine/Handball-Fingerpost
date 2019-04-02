@@ -13,6 +13,9 @@
       <option name="ignoredIdentifiers">
         <list>
           <option value="main_window" />
+          <option value="src.main_window.*" />
+          <option value="team" />
+          <option value="countdown" />
         </list>
       </option>
     </inspection_tool>

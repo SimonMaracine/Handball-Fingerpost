@@ -19,10 +19,6 @@ class Team:
                                             font_name="Calibri",
                                             font_size=50,
                                             x=score_x, y=score_y)
-        # self.team_players = pyglet.text.Label("",
-        #                                     font_name="Calibri",
-        #                                     font_size=50,
-        #                                     x=score_x, y=score_y)
         self.team_name.draw()
         self.team_score.draw()
 
