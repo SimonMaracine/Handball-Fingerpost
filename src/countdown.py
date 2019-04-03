@@ -27,6 +27,7 @@ class Timer:
 
     def update(self, dt):
         self.timer.text = __class__.show(self.countdown)
+        self.timer.y = self.y
         if self.countdown > 0:
             self.countdown -= 1
         else:

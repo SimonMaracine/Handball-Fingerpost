@@ -10,12 +10,12 @@ from player_panel import PlayerPanel
 
 WIDTH = 800
 HEIGHT = 600
-main_window = pyglet.window.Window(WIDTH, HEIGHT, "Handball Fingerpost", vsync=False, visible=False)
+main_window = pyglet.window.Window(WIDTH, HEIGHT, "Handball Score Table", vsync=False, visible=False)
 fps = pyglet.clock.ClockDisplay()
 cwd = os.getcwd()
 os.chdir(cwd[:len(cwd) - 3])  # todo this isn't quite right
 
-icon1 = pyglet.image.load("gfx\\icon1.png")
+icon1 = pyglet.image.load("gfx\\icon1.png")  # window icons
 icon2 = pyglet.image.load("gfx\\icon2.png")
 main_window.set_icon(icon1, icon2)
 main_window.set_visible(True)
@@ -23,31 +23,34 @@ main_window.set_visible(True)
 timer = countdown.Timer(WIDTH//2 - 92, HEIGHT//2 + 180, 60, 60 * 20)  # main timer
 time_out_timer = None  # time-out timer
 game_round = 1
+round_text = pyglet.text.Label(str(game_round), font_name="Calibri", font_size=90, x=340, y=276)
 player_panel = None
 
-players1 = [Player("Simon", 1), Player("Teodor", 2), Player("player3", 3)]
-players2 = [Player("player1", 4), Player("player2", 5), Player("player3", 6), Player("player4", 7)]
+players1 = [Player("Simon", 1, "left"), Player("Teodor", 2, "left"), Player("player3", 3, "left")]
+players2 = [Player("player1", 4, "right"), Player("player2", 5, "right"), Player("player3", 6, "right"), Player("player4", 7, "right")]
 team1 = team.Team("Home", players1, 30, HEIGHT - 130, 110, 350)
 team2 = team.Team("Guest", players2, 565, HEIGHT - 130, 590, 350)
 
 button1 = Button(360, 60, "first button", 14)
-buttons = (button1,)
+buttons = ()
 
 background = pyglet.image.load("gfx\\table2.png")
 
 
 def show_round():
-    round = pyglet.text.Label(str(game_round), font_name="Calibri", font_size=90, x=340, y=276)
-    round.draw()
+    round_text.text = str(game_round)
+    round_text.draw()
 
 
-def show_players(players, team):
-    if team == "first":
-        x = 32
-    else:
-        x = WIDTH - 238
+def show_players(players):
     for i, player in enumerate(players):
-        player.render(x, (-i + 8) * 25)
+        player.render((-i + 8) * 25)
+
+
+def show_suspended_players(players):
+    suspended_players = list(filter(lambda player: player.suspended, players))
+    for i, player in enumerate(suspended_players):
+        player.render_suspended((-len(suspended_players) + i + 9) * 25)
 
 
 def show_buttons():
@@ -60,6 +63,29 @@ def show_timers():
         timer.render()
     if time_out_timer is not None:
         time_out_timer.render()
+
+
+def update_player_functionality(x, y):
+    global player_panel
+    players: list = players1 + players2
+    player_buttons = list(map(lambda player: player.get_button(), players))
+
+    for i, btn in enumerate(player_buttons):
+        if btn.pressed(x, y):
+            # print("player {}".format(i + 1))
+            if players[i].select() == "selected":  # select the clicked player
+                player_panel = PlayerPanel(x, y, players[i])
+                if len(list(filter(lambda player: player.selected, players))) == 2:
+                    for j in range(len(players)):  # unselect the previous clicked player
+                        if j == i:
+                            continue
+                        if players[j].selected:
+                            players[j].select()
+            else:
+                player_panel = None
+
+    if player_panel is not None:
+        player_panel.update(x, y)
 
 
 @main_window.event
@@ -103,30 +129,9 @@ def on_key_press(symbol, modifiers):
 
 @main_window.event
 def on_mouse_press(x, y, button, modifiers):
-    global player_panel
     if button == mouse.LEFT:
         # print('The left mouse button was pressed at ({}, {}).'.format(x, y))
-        players: list = players1 + players2
-        player_buttons = list(map(lambda player: player.get_button(), players))
-        # p = 0
-
-        for i, btn in enumerate(player_buttons):
-            if btn.pressed(x, y):
-                # print("player {}".format(i + 1))
-
-                if players[i].select(x, y) == "selected":  # select the clicked player
-                    player_panel = PlayerPanel(x, y, players[i])
-                    if len(list(filter(lambda player: player.selected, players))) == 2:
-                        for j in range(len(players)):  # unselect the previous clicked player
-                            if j == i:
-                                continue
-                            if players[j].selected:
-                                players[j].select(x, y)
-                else:
-                    player_panel = None
-
-        if player_panel is not None:
-            player_panel.update(x, y)
+        update_player_functionality(x, y)
 
 
 def init():
@@ -155,8 +160,10 @@ def on_draw():
     team2.render()
     show_timers()
     show_round()
-    show_players(players1, "first")
-    show_players(players2, "second")
+    show_players(players1)
+    show_players(players2)
+    show_suspended_players(players1)
+    show_suspended_players(players2)
     show_buttons()
     if player_panel is not None:
         player_panel.render()
