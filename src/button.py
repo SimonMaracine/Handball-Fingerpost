@@ -2,14 +2,16 @@ import pyglet
 
 
 class Button:
-    def __init__(self, x, y, text, size):
+    def __init__(self, x, y, text, size, color=(255, 255, 255, 255), bold=False):
         self.x = x
         self.y = y
         self.text = text
         self.size = size
+        self.color = color
+        self.bold = bold
         self.width = len(self.text) * (self.size // 2)
         self.button_text = pyglet.text.Label(self.text, font_name="Calibri", font_size=self.size,
-                                             x=self.x, y=self.y)
+                                             x=self.x, y=self.y, color=self.color, bold=self.bold)
 
     def render(self):
         # some image or something graphical here

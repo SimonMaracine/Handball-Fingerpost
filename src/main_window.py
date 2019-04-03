@@ -6,6 +6,7 @@ import countdown
 import team
 from player import Player
 from button import Button
+from player_panel import PlayerPanel
 
 WIDTH = 800
 HEIGHT = 600
@@ -22,6 +23,7 @@ main_window.set_visible(True)
 timer = countdown.Timer(WIDTH//2 - 92, HEIGHT//2 + 180, 60, 60 * 20)  # main timer
 time_out_timer = None  # time-out timer
 game_round = 1
+player_panel = None
 
 players1 = [Player("Simon", 1), Player("Teodor", 2), Player("player3", 3)]
 players2 = [Player("player1", 4), Player("player2", 5), Player("player3", 6), Player("player4", 7)]
@@ -43,7 +45,7 @@ def show_players(players, team):
     if team == "first":
         x = 32
     else:
-        x = WIDTH - 278
+        x = WIDTH - 238
     for i, player in enumerate(players):
         player.render(x, (-i + 8) * 25)
 
@@ -101,14 +103,30 @@ def on_key_press(symbol, modifiers):
 
 @main_window.event
 def on_mouse_press(x, y, button, modifiers):
+    global player_panel
     if button == mouse.LEFT:
-        player_buttons = list(map(lambda player: player.get_button(), players1 + players2))
-        print('The left mouse button was pressed at ({}, {}).'.format(x, y))
+        # print('The left mouse button was pressed at ({}, {}).'.format(x, y))
+        players: list = players1 + players2
+        player_buttons = list(map(lambda player: player.get_button(), players))
+        # p = 0
 
         for i, btn in enumerate(player_buttons):
             if btn.pressed(x, y):
-                print("player {}".format(i + 1))
-                (players1 + players2)[i].select()
+                # print("player {}".format(i + 1))
+
+                if players[i].select(x, y) == "selected":  # select the clicked player
+                    player_panel = PlayerPanel(x, y, players[i])
+                    if len(list(filter(lambda player: player.selected, players))) == 2:
+                        for j in range(len(players)):  # unselect the previous clicked player
+                            if j == i:
+                                continue
+                            if players[j].selected:
+                                players[j].select(x, y)
+                else:
+                    player_panel = None
+
+        if player_panel is not None:
+            player_panel.update(x, y)
 
 
 def init():
@@ -123,9 +141,10 @@ def update(dt):
     for i, player in enumerate(players1):
         player.update_button(32, (-i + 8) * 25)
     for i, player in enumerate(players2):
-        player.update_button(WIDTH - 278, (-i + 8) * 25)
+        player.update_button(WIDTH - 238, (-i + 8) * 25)
     team1.update()
     team2.update()
+    # print(players1[0].suspended)
 
 
 @main_window.event
@@ -139,6 +158,8 @@ def on_draw():
     show_players(players1, "first")
     show_players(players2, "second")
     show_buttons()
+    if player_panel is not None:
+        player_panel.render()
     fps.draw()
 
 

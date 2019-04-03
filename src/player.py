@@ -24,13 +24,15 @@ class Player:
     def suspend(self):
         self.suspended = True
 
-    def select(self):
+    def select(self, x, y) -> str:
         if not self.selected:
             self.player.color = (140, 16, 140, 255)
             self.selected = True
+            return "selected"
         else:
             self.player.color = (255, 255, 255, 255)
             self.selected = False
+            return "released"
 
     def update_button(self, x, y):
         self.button = Button(x, y, "{}[{}]".format(self.name, self.id), 20)
