@@ -12,10 +12,10 @@ class Player:
         self.button = None
         self.player_text = pyglet.text.Label("{}[{}]".format(self.name, self.id),
                                              font_name="Calibri",
-                                             font_size=20)
+                                             font_size=18)
         self.suspend_text = pyglet.text.Label("[{}]".format(self.id),
                                               font_name="Calibri",
-                                              font_size=20)
+                                              font_size=18)
         self.suspend_timer = None
         self.selected = False
 
@@ -44,7 +44,7 @@ class Player:
     def suspend(self):
         if not self.suspended:
             self.suspended = True
-            self.suspend_timer = countdown.Timer(314 if self.team == "left" else 464, -100, 20, 60 * 2)  # not that good
+            self.suspend_timer = countdown.Timer(314 if self.team == "left" else 464, -100, 20, 60 * 2)  # todo not that good
             self.suspend_timer.start()
 
     def release(self):
@@ -68,3 +68,11 @@ class Player:
 
     def get_button(self):
         return self.button
+
+    @staticmethod
+    def de_select(players, j):
+        for i in range(len(players)):
+            if j == i:
+                continue
+            if players[i].selected:
+                players[i].select()
