@@ -1,7 +1,7 @@
 import pyglet
 
 
-def rect(x, y, width, height):
+def rect(x, y, width, height, color):
     pyglet.graphics.draw(
         6,
         pyglet.gl.GL_TRIANGLES,
@@ -10,5 +10,6 @@ def rect(x, y, width, height):
                  x + width, y + height,
                  x + width, y + height,
                  x, y + height,
-                 x, y))
+                 x, y)),
+        ("c4B", color * 6)
     )

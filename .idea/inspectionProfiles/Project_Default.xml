@@ -6,6 +6,7 @@
         <list>
           <option value="round" />
           <option value="id" />
+          <option value="type" />
         </list>
       </option>
     </inspection_tool>

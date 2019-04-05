@@ -1,6 +1,7 @@
 import pyglet
 from button import Button
 import countdown
+import draw
 
 
 class Player:
@@ -9,6 +10,8 @@ class Player:
         self.id = id
         self.team = team
         self.suspended = False
+        self.yellow_cards = 0
+        self.red_cards = 0
         self.button = None
         self.player_text = pyglet.text.Label("{}[{}]".format(self.name, self.id),
                                              font_name="Calibri",
@@ -22,6 +25,8 @@ class Player:
     def render(self, y):
         self.update(y)
         self.player_text.draw()
+        for i in range(self.yellow_cards):
+            draw.rect((190 if self.team == "left" else 800 - 80) + i * 14, y, 8, 15, (255, 255, 0, 255))
 
     def render_suspended(self, y):
         self.suspend_text.x = 276 if self.team == "left" else 426
@@ -77,3 +82,18 @@ class Player:
                 continue
             if players[i].selected:
                 players[i].select()
+
+    def give_card(self, type: str):
+        if type == "yellow":
+            self.yellow_cards += 1
+        elif type == "red":
+            self.red_cards += 1
+
+    def take_away_card(self, type: str):
+        if type == "yellow":
+            self.yellow_cards -= 1
+        elif type == "red":
+            self.red_cards -= 1
+
+    def disqualify(self):
+        del self
