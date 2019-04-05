@@ -16,7 +16,7 @@ class Player:
         self.suspend_text = pyglet.text.Label("[{}]".format(self.id),
                                               font_name="Calibri",
                                               font_size=18)
-        self.suspend_timer = None
+        self.suspend_timer = None  # player timer
         self.selected = False
 
     def render(self, y):
@@ -41,11 +41,12 @@ class Player:
         self.player_text.x = 32 if self.team == "left" else 800 - 238  # todo the WIDTH!
         self.player_text.y = y
 
-    def suspend(self):
+    def suspend(self, timer: countdown.Timer):
         if not self.suspended:
             self.suspended = True
             self.suspend_timer = countdown.Timer(314 if self.team == "left" else 464, -100, 20, 60 * 2)  # todo not that good
-            self.suspend_timer.start()
+            if timer.running:
+                self.suspend_timer.start()
 
     def release(self):
         if self.suspended:

@@ -17,9 +17,9 @@ class PlayerPanel:
         self.suspend_button.render()
         self.release_button.render()
 
-    def update(self, x, y) -> bool:  # returns bool to not check for other buttons bellow the panel
+    def update(self, x, y, timer) -> bool:  # returns bool to not check for other buttons bellow the panel
         if self.suspend_button.pressed(x, y):
-            self.player.suspend()
+            self.player.suspend(timer)
             return True
         elif self.release_button.pressed(x, y):
             self.player.release()

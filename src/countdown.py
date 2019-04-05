@@ -32,6 +32,7 @@ class Timer:
             self.countdown -= 1
         else:
             self.finished = True
+            self.running = False
             pyglet.clock.unschedule(self.update)
             print("Time's up!")
 
@@ -44,9 +45,9 @@ class Timer:
         self.countdown = time
         self.timer.text = __class__.show(self.countdown)
         self.finished = False
-        self.interrupt()
+        self.pause()
 
-    def interrupt(self):
+    def pause(self):
         pyglet.clock.unschedule(self.update)
         self.running = False
 
@@ -54,4 +55,4 @@ class Timer:
         self.countdown = self.time
         self.timer.text = __class__.show(self.countdown)
         self.finished = False
-        self.interrupt()
+        self.pause()
