@@ -1,4 +1,5 @@
 # Ignoring some files.
 .idea/workspace.xml
+_pycache_
 *.pyc
 *.exe
