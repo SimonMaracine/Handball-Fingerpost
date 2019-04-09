@@ -24,6 +24,7 @@
           <option value="src.main_window.*" />
           <option value="team" />
           <option value="countdown" />
+          <option value="main_window.*" />
         </list>
       </option>
     </inspection_tool>

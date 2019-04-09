@@ -11,31 +11,145 @@ from player_panel import PlayerPanel
 WIDTH = 800
 HEIGHT = 600
 closed = False
-main_window = pyglet.window.Window(WIDTH, HEIGHT, "Handball Score Table", vsync=True, visible=False)
-fps = pyglet.clock.ClockDisplay()
-cwd = os.getcwd()
-os.chdir("..")
 
-icon1 = pyglet.image.load("gfx\\icon1.png")  # window icons
-icon2 = pyglet.image.load("gfx\\icon2.png")
-main_window.set_icon(icon1, icon2)
-main_window.set_visible(True)
 
-timer = countdown.Timer(WIDTH//2 - 92, HEIGHT//2 + 180, 60, 60 * 20)  # main timer
-time_out_timer = None  # time-out timer
-game_round = 1
-round_text = pyglet.text.Label(str(game_round), font_name="Calibri", font_size=90, x=334, y=304)
-player_panel = None
+def init(*kargs):
+    global main_window, fps, timer, time_out_timer, game_round, round_text, player_panel, \
+        players1, players2, team1, team2, buttons, background, icon1, icon2
+    main_window = pyglet.window.Window(WIDTH, HEIGHT, "Handball Score Table", vsync=True, visible=False)
+    fps = pyglet.clock.ClockDisplay()
+    os.chdir("..")
 
-players1 = [Player("Simon", 1, "left"), Player("Teodor", 2, "left"), Player("player3", 3, "left")]
-players2 = [Player("player1", 4, "right"), Player("player2", 5, "right"), Player("player3", 6, "right"), Player("player4", 7, "right")]
-team1 = team.Team("Home", players1, 30, HEIGHT - 130, 110, 362)
-team2 = team.Team("Guest", players2, 565, HEIGHT - 130, 590, 362)
+    icon1 = pyglet.image.load("gfx\\icon1.png")  # window icons
+    icon2 = pyglet.image.load("gfx\\icon2.png")
+    main_window.set_icon(icon1, icon2)
+    main_window.set_visible(True)
 
-button1 = Button(360, 60, "first button", 14)
-buttons = ()
+    timer = countdown.Timer(WIDTH // 2 - 92, HEIGHT // 2 + 180, 60, 60 * 20)  # main timer
+    time_out_timer = None  # time-out timer
+    game_round = 1
+    round_text = pyglet.text.Label(str(game_round), font_name="Calibri", font_size=90, x=334, y=304)
+    player_panel = None
 
-background = pyglet.image.load("gfx\\table2.png")
+    players1 = [Player("Simon", 1, "left"), Player("Teodor", 2, "left"), Player("player3", 3, "left")]
+    players2 = [Player("player1", 4, "right"), Player("player2", 5, "right"), Player("player3", 6, "right"),
+                Player("player4", 7, "right")]
+    team1 = team.Team("Home", players1, 30, HEIGHT - 130, 110, 362)
+    team2 = team.Team("Guest", players2, 565, HEIGHT - 130, 590, 362)
+
+    button1 = Button(360, 60, "first button", 14)
+    buttons = ()
+
+    background = pyglet.image.load("gfx\\table2.png")
+
+    pyglet.clock.set_fps_limit(48)
+    pyglet.clock.schedule_interval(update, 1 / 48)
+
+
+def update(dt):
+    global time_out_timer
+    if time_out_timer is not None and time_out_timer.finished:
+        time_out_timer = None
+        timer.start()
+        update_players_timers("start", get_players())
+    if timer.finished:
+        update_players_timers("release", get_players())
+    team1.update()
+    team2.update()
+
+
+init()
+
+
+@main_window.event
+def on_draw():
+    main_window.clear()
+    background.blit(0, 0)
+    team1.render()
+    team2.render()
+    show_timers()
+    show_round()
+    show_players(get_players("left"))
+    show_players(get_players("right"))
+    show_suspended_players(get_players("left"))
+    show_suspended_players(get_players("right"))
+    show_buttons()
+    if player_panel is not None:
+        player_panel.render()
+    fps.draw()
+
+
+@main_window.event
+def on_key_press(symbol, modifiers):
+    global game_round, time_out_timer
+    if symbol == key.SPACE and time_out_timer is None:
+        if not timer.running:
+            timer.start()
+            update_players_timers("start", get_players())
+        else:
+            timer.pause()
+            update_players_timers("pause", get_players())
+    elif symbol == key.LEFT:
+        team1.set_name(input("Type first team's name: "))
+    elif symbol == key.RIGHT:
+        team2.set_name(input("Type second team's name: "))
+    elif symbol == key.UP:
+        timer.set_time(int(input("Time: ")))
+    elif symbol == key.A:
+        game_round += 1
+    elif symbol == key.Z:
+        if game_round > 1:
+            game_round -= 1
+    elif symbol == key.ENTER and timer.finished:
+        game_round += 1
+        timer.restart()
+    elif symbol == key.T:
+        team1.request_time_out()
+        if timer.running:
+            time_out_timer = countdown.Timer(WIDTH//2 - 82, HEIGHT//2 + 185, 55, 60)  # 1 minute countdown
+            timer.pause()
+            update_players_timers("pause", get_players())
+        if time_out_timer is not None:
+            if not time_out_timer.running:
+                time_out_timer.start()
+            else:
+                time_out_timer.pause()
+    elif symbol == key.Y:
+        team2.request_time_out()
+        if timer.running:
+            time_out_timer = countdown.Timer(WIDTH//2 - 82, HEIGHT//2 + 185, 55, 60)  # 1 minute countdown
+            timer.pause()
+            update_players_timers("pause", get_players())
+        if time_out_timer is not None:
+            if not time_out_timer.running:
+                time_out_timer.start()
+            else:
+                time_out_timer.pause()
+    elif symbol == key.R:
+        timer.restart()
+        time_out_timer = None
+        update_players_timers("release", get_players())
+
+
+@main_window.event
+def on_mouse_press(x, y, button, modifiers):
+    if button == mouse.LEFT:
+        # print('The left mouse button was pressed at ({}, {}).'.format(x, y))
+        update_player_functionality(x, y)
+
+
+@main_window.event
+def on_mouse_motion(x, y, dx, dy):  # to update buttons' visuals
+    for button in map(lambda player: player.get_button(), get_players("remained")):
+        button.pressed(x, y)
+    if player_panel is not None:
+        for button in player_panel.get_buttons():
+            button.pressed(x, y)
+
+
+@main_window.event
+def on_close():
+    pyglet.app.exit()
 
 
 def show_round():
@@ -109,11 +223,7 @@ def init_player_buttons():
         player.update_button(WIDTH - 238, (-i + 13) * 23)
 
 
-def close_second_window() -> bool:
-    if closed:
-        return True
-    else:
-        return False
+init_player_buttons()
 
 
 def update_players_timers(func: str, players):
@@ -127,119 +237,3 @@ def update_players_timers(func: str, players):
     else:
         for player in suspended_players:
             player.release()
-
-
-@main_window.event
-def on_key_press(symbol, modifiers):
-    global game_round, time_out_timer
-    if symbol == key.SPACE and time_out_timer is None:
-        if not timer.running:
-            timer.start()
-            update_players_timers("start", get_players())
-        else:
-            timer.pause()
-            update_players_timers("pause", get_players())
-    elif symbol == key.LEFT:
-        team1.set_name(input("Type first team's name: "))
-    elif symbol == key.RIGHT:
-        team2.set_name(input("Type second team's name: "))
-    elif symbol == key.UP:
-        timer.set_time(int(input("Time: ")))
-    # elif symbol == key.A:
-    #     team1.score_up()
-    # elif symbol == key.D:
-    #     team2.score_up()
-    # elif symbol == key.Z:
-    #     team1.score_down()
-    # elif symbol == key.C:
-    #     team2.score_down()
-    elif symbol == key.ENTER and timer.finished:
-        game_round += 1
-        timer.restart()
-    elif symbol == key.T:
-        team1.request_time_out()
-        if timer.running:
-            time_out_timer = countdown.Timer(WIDTH//2 - 82, HEIGHT//2 + 185, 55, 60)  # 1 minute countdown
-            timer.pause()
-            update_players_timers("pause", get_players())
-        if time_out_timer is not None:
-            if not time_out_timer.running:
-                time_out_timer.start()
-            else:
-                time_out_timer.pause()
-    elif symbol == key.Y:
-        team2.request_time_out()
-        if timer.running:
-            time_out_timer = countdown.Timer(WIDTH//2 - 82, HEIGHT//2 + 185, 55, 60)  # 1 minute countdown
-            timer.pause()
-            update_players_timers("pause", get_players())
-        if time_out_timer is not None:
-            if not time_out_timer.running:
-                time_out_timer.start()
-            else:
-                time_out_timer.pause()
-    elif symbol == key.R:
-        timer.restart()
-        time_out_timer = None
-        update_players_timers("release", get_players())
-
-
-@main_window.event
-def on_mouse_press(x, y, button, modifiers):
-    if button == mouse.LEFT:
-        # print('The left mouse button was pressed at ({}, {}).'.format(x, y))
-        update_player_functionality(x, y)
-
-
-@main_window.event
-def on_mouse_motion(x, y, dx, dy):  # to update buttons' visuals
-    for button in map(lambda player: player.get_button(), get_players("remained")):
-        button.pressed(x, y)
-    if player_panel is not None:
-        for button in player_panel.get_buttons():
-            button.pressed(x, y)
-
-
-@main_window.event
-def on_close():
-    global closed
-    closed = True
-
-
-def init():
-    pass
-
-
-def update(dt):
-    global time_out_timer
-    if time_out_timer is not None and time_out_timer.finished:
-        time_out_timer = None
-        timer.start()
-        update_players_timers("start", get_players())
-    if timer.finished:
-        update_players_timers("release", get_players())
-    team1.update()
-    team2.update()
-
-
-@main_window.event
-def on_draw():
-    main_window.clear()
-    background.blit(0, 0)
-    team1.render()
-    team2.render()
-    show_timers()
-    show_round()
-    show_players(get_players("left"))
-    show_players(get_players("right"))
-    show_suspended_players(get_players("left"))
-    show_suspended_players(get_players("right"))
-    show_buttons()
-    if player_panel is not None:
-        player_panel.render()
-    fps.draw()
-
-
-init_player_buttons()
-pyglet.clock.set_fps_limit(48)
-pyglet.clock.schedule_interval(update, 1/48)
