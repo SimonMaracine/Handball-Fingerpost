@@ -6,6 +6,7 @@ class Team:
         self.name = name
         self.players = players
         self.score = 0
+        self.time_out_requests = 0
         self.team_name = pyglet.text.Label(self.name,
                                            font_name="Calibri",
                                            font_size=40,
@@ -32,3 +33,6 @@ class Team:
     def score_down(self):
         if self.score > 0:
             self.score -= 1
+
+    def request_time_out(self):
+        self.time_out_requests += 1

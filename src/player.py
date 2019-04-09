@@ -5,13 +5,15 @@ import draw
 
 
 class Player:
-    def __init__(self, name, id, team):
+    def __init__(self, name, id, team_side):
         self.name = name
         self.id = id
-        self.team = team
+        self.team_side = team_side
         self.suspended = False
         self.yellow_cards = 0
         self.red_cards = 0
+        self.scores = 0
+        self.disqualified = False
         self.button = None
         self.player_text = pyglet.text.Label("{}[{}]".format(self.name, self.id),
                                              font_name="Calibri",
@@ -25,11 +27,12 @@ class Player:
     def render(self, y):
         self.update(y)
         self.player_text.draw()
+        # self.button.render(False)
         for i in range(self.yellow_cards):
-            draw.rect((190 if self.team == "left" else 800 - 80) + i * 14, y, 8, 15, (255, 255, 0, 255))
+            draw.rect((190 if self.team_side == "left" else 800 - 80) + i * 14, y, 8, 15, (255, 255, 0, 255))
 
     def render_suspended(self, y):
-        self.suspend_text.x = 276 if self.team == "left" else 426
+        self.suspend_text.x = 276 if self.team_side == "left" else 426
         self.suspend_text.y = y
 
         if self.suspended:
@@ -43,13 +46,13 @@ class Player:
                 self.release()
 
     def update(self, y):
-        self.player_text.x = 32 if self.team == "left" else 800 - 238  # todo the WIDTH!
+        self.player_text.x = 32 if self.team_side == "left" else 800 - 238  # todo the WIDTH!
         self.player_text.y = y
 
     def suspend(self, timer: countdown.Timer):
         if not self.suspended:
             self.suspended = True
-            self.suspend_timer = countdown.Timer(314 if self.team == "left" else 464, -100, 20, 60 * 2)  # todo not that good
+            self.suspend_timer = countdown.Timer(314 if self.team_side == "left" else 464, -100, 20, 60 * 2)  # todo not that good
             if timer.running:
                 self.suspend_timer.start()
 
@@ -61,11 +64,17 @@ class Player:
 
     def select(self) -> str:
         if not self.selected:
-            self.player_text.color = (140, 16, 140, 255)
+            if not self.disqualified:
+                self.player_text.color = (140, 16, 140, 255)
+            else:
+                self.player_text.color = (80, 80, 80, 255)
             self.selected = True
             return "selected"
         else:
-            self.player_text.color = (255, 255, 255, 255)
+            if not self.disqualified:
+                self.player_text.color = (255, 255, 255, 255)
+            else:
+                self.player_text.color = (80, 80, 80, 255)
             self.selected = False
             return "released"
 
@@ -76,24 +85,43 @@ class Player:
         return self.button
 
     @staticmethod
-    def de_select(players, j):
-        for i in range(len(players)):
-            if j == i:
-                continue
-            if players[i].selected:
-                players[i].select()
+    def de_select(players, j=None):
+        if j is not None:
+            for i in range(len(players)):
+                if j == i:
+                    continue
+                if players[i].selected:
+                    players[i].select()
+                    break
+        else:
+            for i in range(len(players)):
+                if players[i].selected:
+                    players[i].select()
+                    break
 
     def give_card(self, type: str):
         if type == "yellow":
-            self.yellow_cards += 1
+            if self.yellow_cards < 2:
+                self.yellow_cards += 1
         elif type == "red":
-            self.red_cards += 1
+            if self.yellow_cards < 1:
+                self.red_cards += 1
 
     def take_away_card(self, type: str):
         if type == "yellow":
-            self.yellow_cards -= 1
+            if self.yellow_cards > 0:
+                self.yellow_cards -= 1
         elif type == "red":
-            self.red_cards -= 1
+            if self.red_cards > 0:
+                self.red_cards -= 1
 
     def disqualify(self):
-        del self
+        self.disqualified = True
+        self.player_text.color = (80, 80, 80, 255)
+
+    def team_score(self, up: bool):
+        if up is True:
+            self.scores += 1
+        else:
+            if self.scores > 0:
+                self.scores -= 1

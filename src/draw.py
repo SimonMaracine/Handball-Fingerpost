@@ -13,3 +13,4 @@ def rect(x, y, width, height, color):
                  x, y)),
         ("c4B", color * 6)
     )
+

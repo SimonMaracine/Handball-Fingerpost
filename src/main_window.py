@@ -14,7 +14,7 @@ closed = False
 main_window = pyglet.window.Window(WIDTH, HEIGHT, "Handball Score Table", vsync=True, visible=False)
 fps = pyglet.clock.ClockDisplay()
 cwd = os.getcwd()
-os.chdir(cwd[:len(cwd) - 3])  # todo this isn't quite right
+os.chdir("..")
 
 icon1 = pyglet.image.load("gfx\\icon1.png")  # window icons
 icon2 = pyglet.image.load("gfx\\icon2.png")
@@ -66,9 +66,21 @@ def show_timers():
         time_out_timer.render()
 
 
+def get_players(mode="all") -> list:  # Returns all players.
+    if mode == "all":
+        players = players1 + players2
+    elif mode == "left":
+        players = players1
+    elif mode == "right":
+        players = players2
+    else:
+        players = list(filter(lambda player: not player.disqualified, players1 + players2))
+    return players
+
+
 def update_player_functionality(x, y):
     global player_panel
-    players: list = players1 + players2
+    players = get_players("remained")
     player_buttons = list(map(lambda player: player.get_button(), players))
 
     if player_panel is not None:
@@ -79,17 +91,21 @@ def update_player_functionality(x, y):
         if btn.pressed(x, y):
             # print("player {}".format(i + 1))
             if players[i].select() == "selected":  # select the clicked player
-                player_panel = PlayerPanel(x, y, players[i])
+                player_panel = PlayerPanel(x, y, players[i], (team1, team2))
                 if len(list(filter(lambda player: player.selected, players))) == 2:
                     Player.de_select(players, i)  # de-select previous clicked player
             else:
                 player_panel = None
+            break
+    else:
+        Player.de_select(players)
+        player_panel = None
 
 
 def init_player_buttons():
-    for i, player in enumerate(players1):
+    for i, player in enumerate(get_players("left")):
         player.update_button(32, (-i + 13) * 23)
-    for i, player in enumerate(players2):
+    for i, player in enumerate(get_players("right")):
         player.update_button(WIDTH - 238, (-i + 13) * 23)
 
 
@@ -119,32 +135,44 @@ def on_key_press(symbol, modifiers):
     if symbol == key.SPACE and time_out_timer is None:
         if not timer.running:
             timer.start()
-            update_players_timers("start", players1 + players2)
+            update_players_timers("start", get_players())
         else:
             timer.pause()
-            update_players_timers("pause", players1 + players2)
+            update_players_timers("pause", get_players())
     elif symbol == key.LEFT:
         team1.set_name(input("Type first team's name: "))
     elif symbol == key.RIGHT:
         team2.set_name(input("Type second team's name: "))
     elif symbol == key.UP:
         timer.set_time(int(input("Time: ")))
-    elif symbol == key.A:
-        team1.score_up()
-    elif symbol == key.D:
-        team2.score_up()
-    elif symbol == key.Z:
-        team1.score_down()
-    elif symbol == key.C:
-        team2.score_down()
+    # elif symbol == key.A:
+    #     team1.score_up()
+    # elif symbol == key.D:
+    #     team2.score_up()
+    # elif symbol == key.Z:
+    #     team1.score_down()
+    # elif symbol == key.C:
+    #     team2.score_down()
     elif symbol == key.ENTER and timer.finished:
         game_round += 1
         timer.restart()
     elif symbol == key.T:
+        team1.request_time_out()
         if timer.running:
             time_out_timer = countdown.Timer(WIDTH//2 - 82, HEIGHT//2 + 185, 55, 60)  # 1 minute countdown
             timer.pause()
-            update_players_timers("pause", players1 + players2)
+            update_players_timers("pause", get_players())
+        if time_out_timer is not None:
+            if not time_out_timer.running:
+                time_out_timer.start()
+            else:
+                time_out_timer.pause()
+    elif symbol == key.Y:
+        team2.request_time_out()
+        if timer.running:
+            time_out_timer = countdown.Timer(WIDTH//2 - 82, HEIGHT//2 + 185, 55, 60)  # 1 minute countdown
+            timer.pause()
+            update_players_timers("pause", get_players())
         if time_out_timer is not None:
             if not time_out_timer.running:
                 time_out_timer.start()
@@ -153,7 +181,7 @@ def on_key_press(symbol, modifiers):
     elif symbol == key.R:
         timer.restart()
         time_out_timer = None
-        update_players_timers("release", players1 + players2)
+        update_players_timers("release", get_players())
 
 
 @main_window.event
@@ -161,6 +189,15 @@ def on_mouse_press(x, y, button, modifiers):
     if button == mouse.LEFT:
         # print('The left mouse button was pressed at ({}, {}).'.format(x, y))
         update_player_functionality(x, y)
+
+
+@main_window.event
+def on_mouse_motion(x, y, dx, dy):  # to update buttons' visuals
+    # for button in map(lambda player: player.get_button(), get_players("remained")):
+    #     button.pressed(x, y)
+    if player_panel is not None:
+        for button in player_panel.get_buttons():
+            button.pressed(x, y)
 
 
 @main_window.event
@@ -178,9 +215,9 @@ def update(dt):
     if time_out_timer is not None and time_out_timer.finished:
         time_out_timer = None
         timer.start()
-        update_players_timers("start", players1 + players2)
+        update_players_timers("start", get_players())
     if timer.finished:
-        update_players_timers("release", players1 + players2)
+        update_players_timers("release", get_players())
     team1.update()
     team2.update()
 
@@ -193,10 +230,10 @@ def on_draw():
     team2.render()
     show_timers()
     show_round()
-    show_players(players1)
-    show_players(players2)
-    show_suspended_players(players1)
-    show_suspended_players(players2)
+    show_players(get_players("left"))
+    show_players(get_players("right"))
+    show_suspended_players(get_players("left"))
+    show_suspended_players(get_players("right"))
     show_buttons()
     if player_panel is not None:
         player_panel.render()
@@ -204,5 +241,5 @@ def on_draw():
 
 
 init_player_buttons()
-pyglet.clock.set_fps_limit(60)
-pyglet.clock.schedule_interval(update, 1/60)
+pyglet.clock.set_fps_limit(48)
+pyglet.clock.schedule_interval(update, 1/48)
