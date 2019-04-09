@@ -193,8 +193,8 @@ def on_mouse_press(x, y, button, modifiers):
 
 @main_window.event
 def on_mouse_motion(x, y, dx, dy):  # to update buttons' visuals
-    # for button in map(lambda player: player.get_button(), get_players("remained")):
-    #     button.pressed(x, y)
+    for button in map(lambda player: player.get_button(), get_players("remained")):
+        button.pressed(x, y)
     if player_panel is not None:
         for button in player_panel.get_buttons():
             button.pressed(x, y)

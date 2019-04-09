@@ -26,8 +26,8 @@ class Player:
 
     def render(self, y):
         self.update(y)
+        self.button.render(False)
         self.player_text.draw()
-        # self.button.render(False)
         for i in range(self.yellow_cards):
             draw.rect((190 if self.team_side == "left" else 800 - 80) + i * 14, y, 8, 15, (255, 255, 0, 255))
 
@@ -79,7 +79,7 @@ class Player:
             return "released"
 
     def update_button(self, x, y):
-        self.button = Button(x, y, "{}[{}]".format(self.name, self.id), 20)
+        self.button = Button(x, y, "{}[{}]".format(self.name, self.id), 20, (255, 255, 255, 255), False, False, (140, 140, 140, 255))
 
     def get_button(self):
         return self.button

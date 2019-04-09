@@ -8,15 +8,15 @@ class PlayerPanel:
         self.y = y
         self.player = player
         self.teams = teams
-        self.team_score_button = Button(x + 20, y + 30 + 22, "+ Team score", 16, (16, 16, 255, 255), True, True, (160, 160, 160, 178))
-        self.team_score_button2 = Button(x + 20, y + 30, "- Team score", 16, (16, 16, 190, 255), True, True, (160, 160, 160, 178))
-        self.suspend_button = Button(x + 20, y + 30 - 22, "Suspend", 16, (200, 16, 16, 255), True, True, (160, 160, 160, 178))
-        self.release_button = Button(x + 20, y + 30 - 44, "Release", 16, (16, 255, 16, 255), True, True, (160, 160, 160, 178))
-        self.yellow_card_button = Button(x + 20, y + 30 - 66, "+ Yellow card", 16, (214, 214, 16, 255), True, True, (160, 160, 160, 178))
-        self.yellow_button2 = Button(x + 20, y + 30 - 88, "- Yellow card", 16, (255, 255, 16, 255), True, True, (160, 160, 160, 178))
-        self.red_card_button = Button(x + 20, y + 30 - 110, "+ Red card", 16, (200, 16, 16, 255), True, True, (160, 160, 160, 178))
-        self.red_button2 = Button(x + 20, y + 30 - 132, "- Red card", 16, (255, 16, 16, 255), True, True, (160, 160, 160, 178))
-        self.disqualify_button = Button(x + 20, y + 30 - 154, "Disqualify", 16, (120, 64, 64, 255), True, True, (160, 160, 160, 178))
+        self.team_score_button = Button(x + 20, y + 30 + 22, "+ Team score", 16, (16, 16, 255, 255), True, True, (160, 160, 160, 255))
+        self.team_score_button2 = Button(x + 20, y + 30, "- Team score", 16, (16, 16, 190, 255), True, True, (160, 160, 160, 255))
+        self.suspend_button = Button(x + 20, y + 30 - 22, "Suspend", 16, (200, 16, 16, 255), True, True, (160, 160, 160, 255))
+        self.release_button = Button(x + 20, y + 30 - 44, "Release", 16, (16, 255, 16, 255), True, True, (160, 160, 160, 255))
+        self.yellow_card_button = Button(x + 20, y + 30 - 66, "+ Yellow card", 16, (214, 214, 16, 255), True, True, (160, 160, 160, 255))
+        self.yellow_button2 = Button(x + 20, y + 30 - 88, "- Yellow card", 16, (255, 255, 16, 255), True, True, (160, 160, 160, 255))
+        self.red_card_button = Button(x + 20, y + 30 - 110, "+ Red card", 16, (200, 16, 16, 255), True, True, (160, 160, 160, 255))
+        self.red_button2 = Button(x + 20, y + 30 - 132, "- Red card", 16, (255, 16, 16, 255), True, True, (160, 160, 160, 255))
+        self.disqualify_button = Button(x + 20, y + 30 - 154, "Disqualify", 16, (120, 64, 64, 255), True, True, (160, 160, 160, 255))
         self.buttons = (
             self.team_score_button,
             self.team_score_button2,
