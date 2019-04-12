@@ -25,6 +25,7 @@
           <option value="team" />
           <option value="countdown" />
           <option value="main_window.*" />
+          <option value="window0.window0" />
         </list>
       </option>
     </inspection_tool>

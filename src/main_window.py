@@ -7,15 +7,17 @@ import team
 from player import Player
 from button import Button
 from player_panel import PlayerPanel
+import window0
 
 WIDTH = 800
 HEIGHT = 600
 closed = False
 
 
-def init(*kargs):
+def init(*args):
     global main_window, fps, timer, time_out_timer, game_round, round_text, player_panel, \
         players1, players2, team1, team2, buttons, background, icon1, icon2
+    print(window0.get_text(0))
     main_window = pyglet.window.Window(WIDTH, HEIGHT, "Handball Score Table", vsync=True, visible=False)
     fps = pyglet.clock.ClockDisplay()
     os.chdir("..")
