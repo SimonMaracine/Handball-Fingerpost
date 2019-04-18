@@ -1,34 +1,42 @@
 import pyglet
 from text_entry import TextWidget
 
-WIDTH = 640  # these may remain
-HEIGHT = 480
+WIDTH = 800  # these may remain
+HEIGHT = 600
+window0 = pyglet.window.Window(WIDTH, HEIGHT, "Handball Score Table (first)", vsync=True)
 
 
-def init(*args):
-    global window0, batch, widgets, text_cursor, focus
-    window0 = pyglet.window.Window(WIDTH, HEIGHT, "Handball Score Table (first)", vsync=True)
-    batch = pyglet.graphics.Batch()
-    pyglet.text.Label('Name', x=10, y=HEIGHT-120, anchor_y='bottom',
-                      color=(0, 0, 0, 255), batch=batch),
-    pyglet.text.Label('Species', x=10, y=HEIGHT-155, anchor_y='bottom',
-                      color=(0, 0, 0, 255), batch=batch),
-    pyglet.text.Label('Special abilities', x=10, y=HEIGHT-190,
-                      anchor_y='bottom', color=(0, 0, 0, 255), batch=batch)
-    widgets = (
-        TextWidget('', 200, HEIGHT - 120, WIDTH - 210, batch),
-        TextWidget('', 200, HEIGHT - 155, WIDTH - 210, batch),
-        TextWidget('', 200, HEIGHT - 190, WIDTH - 210, batch)
-    )
-    text_cursor = window0.get_system_mouse_cursor('text')
-    focus = None
+def create_labels():
+    pyglet.text.Label("Team 1", x=10, y=HEIGHT-110, anchor_y="bottom",
+                      color=(0, 0, 0, 255), batch=batch)
+    for i in range(16):
+        pyglet.text.Label("Player {}".format(i + 1), x=10, y=HEIGHT-140-30*i, anchor_y="bottom",
+                          color=(0, 0, 0, 255), batch=batch)
+    pyglet.text.Label("Team 2", x=WIDTH//2 - 100, y=HEIGHT-110,
+                      anchor_y="bottom", color=(0, 0, 0, 255), batch=batch)
+    for i in range(16):
+        pyglet.text.Label("Player {}".format(i + 1), x=WIDTH//2-100, y=HEIGHT-140-30*i, anchor_y="bottom",
+                          color=(0, 0, 0, 255), batch=batch)
+    pyglet.text.Label("Main timer", x=WIDTH//2+190, y=HEIGHT-110, anchor_y="bottom",
+                      color=(0, 0, 0, 255), batch=batch)
+
+
+def create_widgets() -> tuple:
+    widgets_ = []
+    widgets_.append(TextWidget('', 90, HEIGHT - 110, 150, batch))
+    for i in range(16):
+        widgets_.append(TextWidget('', 90, HEIGHT - 140 - 30 * i, 150, batch))
+
+    widgets_.append(TextWidget('', WIDTH // 2 - 20, HEIGHT - 110, 150, batch))
+    for i in range(16):
+        widgets_.append(TextWidget('', WIDTH // 2 - 20, HEIGHT - 140 - 30 * i, 150, batch))
+
+    widgets_.append(TextWidget("20", WIDTH // 2 + 290, HEIGHT - 110, 90, batch))
+    return tuple(widgets_)
 
 
 def update(dt):
     pass
-
-
-init()
 
 
 @window0.event
@@ -103,7 +111,7 @@ def on_key_press(symbol, modifiers):
 
         set_focus(widgets[(i + direction) % len(widgets)])
     elif symbol == pyglet.window.key.ENTER:
-        # todo hmm
+        start_table()  # open the actual table interface thingy... what am I saying
         window0.close()
     elif symbol == pyglet.window.key.ESCAPE:
         pyglet.app.exit()
@@ -127,9 +135,26 @@ def set_focus(focus_):
         focus.caret.position = len(focus.document.text)
 
 
-set_focus(widgets[0])
-
-
 def get_text(widget: int):
     text = widgets[widget].document.text
     return text
+
+
+def start_table():
+    import table
+    table.prepare_table(int(get_text(34)),
+                        [get_text(i) for i in range(1, 16) if get_text(i)],
+                        [get_text(i) for i in range(18, 32) if get_text(i)],
+                        get_text(0),
+                        get_text(17))
+    import main_window
+    import second_window
+    main_window.main_window.activate()
+
+
+batch = pyglet.graphics.Batch()
+create_labels()
+widgets = create_widgets()
+text_cursor = window0.get_system_mouse_cursor('text')
+focus = None
+set_focus(widgets[0])

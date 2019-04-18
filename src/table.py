@@ -9,20 +9,22 @@ from player_panel import PlayerPanel
 WIDTH = 800
 HEIGHT = 600
 
+table = None
+
 
 class Table:
-    def __init__(self):
-        self.timer = countdown.Timer(WIDTH // 2 - 92, HEIGHT // 2 + 180, 60, 60 * 20)  # main timer
+    def __init__(self, time: int, players1: list, players2: list, team1: str, team2: str):
+        self.timer = countdown.Timer(WIDTH // 2 - 92, HEIGHT // 2 + 180, 60, 60 * time)  # main timer
         self.time_out_timer = None  # time-out timer
         self.game_round = 1
         self.round_text = pyglet.text.Label(str(self.game_round), font_name="Calibri", font_size=90, x=334, y=304)
         self.player_panel = None
 
-        self.players1 = [Player("Simon", 1, "left"), Player("Teodor", 2, "left"), Player("player3", 3, "left")]
-        self.players2 = [Player("player1", 4, "right"), Player("player2", 5, "right"), Player("player3", 6, "right"),
-                         Player("player4", 7, "right")]
-        self.team1 = team.Team("Home", self.players1, 30, HEIGHT - 130, 110, 362)
-        self.team2 = team.Team("Guest", self.players2, 565, HEIGHT - 130, 590, 362)
+        self.players1 = [Player(players1[i], i + 1, "left") for i in range(len(players1))]
+        self.players2 = [Player(players2[i], i + len(players1) + 1, "right") for i in range(len(players2))]
+
+        self.team1 = team.Team(team1, self.players1, 30, HEIGHT - 130, 110, 362)
+        self.team2 = team.Team(team2, self.players2, 565, HEIGHT - 130, 590, 362)
 
         self.button1 = Button(360, 60, "first button", 14)
         self.buttons = ()
@@ -121,4 +123,6 @@ class Table:
         self.game_round += x
 
 
-table = Table()
+def prepare_table(*args):
+    global table
+    table = Table(*args)

@@ -4,16 +4,6 @@ import countdown
 from table import Table, table, WIDTH, HEIGHT
 
 main_window = pyglet.window.Window(WIDTH, HEIGHT, "Handball Score Table", vsync=True, visible=False)
-icon1 = pyglet.image.load("..\\gfx\\icon1.png")  # window icons
-icon2 = pyglet.image.load("..\\gfx\\icon2.png")
-main_window.set_icon(icon1, icon2)
-main_window.set_visible(True)
-
-background = pyglet.image.load("..\\gfx\\table2.png")
-
-closed = False
-fps = pyglet.clock.ClockDisplay()
-pyglet.clock.schedule_interval(table.update, 1 / 48)
 
 
 @main_window.event
@@ -56,7 +46,7 @@ def on_key_press(symbol, modifiers):
     elif symbol == key.ENTER and table.timer.finished:
         table.advance_round(1)
         table.timer.restart()
-    elif symbol == key.T:
+    elif symbol == key.T:  # todo check existing time-out first!
         table.team1.request_time_out()
         if table.timer.running:
             table.time_out_timer = countdown.Timer(WIDTH//2 - 82, HEIGHT//2 + 185, 55, 60)  # 1 minute countdown
@@ -103,3 +93,15 @@ def on_mouse_motion(x, y, dx, dy):  # to update buttons' visuals
 @main_window.event
 def on_close():
     pyglet.app.exit()
+
+
+icon1 = pyglet.image.load("..\\gfx\\icon1.png")  # window icons
+icon2 = pyglet.image.load("..\\gfx\\icon2.png")
+main_window.set_icon(icon1, icon2)
+main_window.set_visible(True)
+
+background = pyglet.image.load("..\\gfx\\table2.png")
+
+closed = False
+fps = pyglet.clock.ClockDisplay()
+pyglet.clock.schedule_interval(table.update, 1 / 48)

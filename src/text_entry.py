@@ -20,7 +20,7 @@ class TextWidget:
     def hit_test(self, x, y):
         x_hit = 0 < x - self.layout.x < self.layout.width
         y_hit = 0 < y - self.layout.y < self.layout.height
-        return x_hit, y_hit
+        return x_hit and y_hit
 
     def render(self):
-        draw.rect(self.layout.x, self.layout.y, self.width, self.height, (140, 140, 140, 255))
+        draw.rect(self.layout.x, self.layout.y, self.width, self.height, (160, 160, 160, 255))
