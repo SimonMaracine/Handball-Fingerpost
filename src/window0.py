@@ -41,7 +41,7 @@ def load_configuration(configuration="..\\data\\last_configuration.ini"):
     config.read(configuration)
 
     try:
-        with open(configuration) as f:
+        with open(configuration) as _:
             pass
     except FileNotFoundError:
         print("No such configuration file found.")
@@ -51,14 +51,15 @@ def load_configuration(configuration="..\\data\\last_configuration.ini"):
         widgets[0].document.text = config["Team1"]["team_name"]
         for i in range(1, 16):
             widgets[i].document.text = config["Team1"]["player {}".format(i)]
-            widgets[i].caret.visible = False
         widgets[17].document.text = config["Team2"]["team_name"]
         for i in range(18, 33):
             widgets[i].document.text = config["Team2"]["player {}".format(i)]
-            widgets[i].caret.visible = False
         widgets[34].document.text = config["Timer"]["main_timer"]
     except (configparser.MissingSectionHeaderError, KeyError):  # todo might exist more exceptions
         print("Configuration file might be corrupted.")
+    finally:
+        for widget in widgets:
+            widget.caret.visible = False
 
 
 def create_labels():
@@ -179,7 +180,8 @@ def prepare_game_scene():
     button2 = Button(30, HEIGHT - 35, "Back", 16, (0, 0, 0, 255), secondary_color=(200, 200, 200, 255))
     button3 = Button(310, HEIGHT - 65, "Load custom configuration", 16, (0, 0, 0, 255), secondary_color=(200, 200, 200, 255))
     button4 = Button(310, HEIGHT - 35, "Save custom configuration", 16, (0, 0, 0, 255), secondary_color=(200, 200, 200, 255))
-    buttons = (button1, button2, button3, button4)
+    button5 = Button(580, HEIGHT - 335, "Start game", 26, (0, 0, 0, 255), secondary_color=(200, 200, 200, 255))
+    buttons = (button1, button2, button3, button4, button5)
 
     def update(dt):
         # print("prepare_game_scene")
@@ -224,6 +226,11 @@ def prepare_game_scene():
             load_configuration("..\\data\\{}.ini".format(get_text(35)))
         elif button4.pressed(x, y):
             save_configuration("..\\data\\{}.ini".format(get_text(36)))
+        elif button5.pressed(x, y):
+            if start_table():  # open the actual table interface thingy... what am I saying
+                save_configuration()
+                switch_scene(None, update)
+                window0.close()
 
     @window0.event
     def on_mouse_drag(x, y, dx, dy, buttons, modifiers):

@@ -107,9 +107,9 @@ class Table:
 
     def init_player_buttons(self):
         for i, player in enumerate(self.get_players("left")):
-            player.update_button(32, (-i + 13) * 23)
+            player.update_button(30, (-i + 13) * 23)
         for i, player in enumerate(self.get_players("right")):
-            player.update_button(WIDTH - 238, (-i + 13) * 23)
+            player.update_button(WIDTH - 240, (-i + 13) * 23)
 
     @staticmethod
     def update_players_timers(func: str, players):

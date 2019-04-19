@@ -1,4 +1,5 @@
 import pyglet
+
 from button import Button
 import countdown
 import draw
@@ -79,7 +80,7 @@ class Player:
             return "released"
 
     def update_button(self, x, y):
-        self.button = Button(x, y, "{}[{}]".format(self.name, self.id), 20, (255, 255, 255, 255), False, False, (140, 140, 140, 255))
+        self.button = Button(x, y - 4, "{}[{}]".format(self.name, self.id), 18, (255, 255, 255, 255), False, False, (140, 140, 140, 255))
 
     def get_button(self):
         return self.button
