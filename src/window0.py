@@ -44,16 +44,21 @@ def load_configuration(configuration="..\\data\\last_configuration.ini"):
         with open(configuration) as f:
             pass
     except FileNotFoundError:
-        print("No such configuration found.")
+        print("No such configuration file found.")
         return
 
-    widgets[0].document.text = config["Team1"]["team_name"]
-    for i in range(1, 16):
-        widgets[i].document.text = config["Team1"]["player {}".format(i)]
-    widgets[17].document.text = config["Team2"]["team_name"]
-    for i in range(18, 33):
-        widgets[i].document.text = config["Team2"]["player {}".format(i)]
-    widgets[34].document.text = config["Timer"]["main_timer"]
+    try:
+        widgets[0].document.text = config["Team1"]["team_name"]
+        for i in range(1, 16):
+            widgets[i].document.text = config["Team1"]["player {}".format(i)]
+            widgets[i].caret.visible = False
+        widgets[17].document.text = config["Team2"]["team_name"]
+        for i in range(18, 33):
+            widgets[i].document.text = config["Team2"]["player {}".format(i)]
+            widgets[i].caret.visible = False
+        widgets[34].document.text = config["Timer"]["main_timer"]
+    except (configparser.MissingSectionHeaderError, KeyError):  # todo might exist more exceptions
+        print("Configuration file might be corrupted.")
 
 
 def create_labels():
