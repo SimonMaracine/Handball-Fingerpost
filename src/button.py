@@ -12,16 +12,16 @@ class Button:
         self.bold = bold
         self.bigger = bigger
         self.secondary_color = secondary_color
-        self.width = len(self.text) * (self.size // 2) + (24 if self.bigger else 0)
-        self.height = self.size + (5 if self.bigger else 0)
         self.button_text = pyglet.text.Label(self.text, font_name="Calibri", font_size=self.size,
-                                             x=self.x, y=self.y, color=self.color, bold=self.bold)
+                                             x=self.x+2, y=self.y+2, color=self.color, bold=self.bold)
+        self.width = self.button_text.content_width
+        self.height = self.button_text.content_height // 2 + 6
         self.highlight = False
 
     def render(self, text: bool=True):
         # some image or something graphical here todo implement this
         if self.highlight:
-            draw.rect(self.x, self.y - 3, self.width, self.height, self.secondary_color)
+            draw.rect(self.x, self.y, self.width + 4, self.height, self.secondary_color)
         else:
             pass
         if text:

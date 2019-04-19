@@ -23,4 +23,4 @@ class TextWidget:
         return x_hit and y_hit
 
     def render(self):
-        draw.rect(self.layout.x, self.layout.y, self.width, self.height, (160, 160, 160, 255))
+        draw.rect(self.layout.x - 2, self.layout.y, self.width + 4, self.height, (200, 200, 210, 255))
