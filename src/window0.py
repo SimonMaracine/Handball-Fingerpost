@@ -18,17 +18,17 @@ def switch_scene(scene, *args):
         scene()
 
 
-def save_configuration(configfile="..\\data\\last_configuration.ini"):
+def save_configuration(configfile="..\\data\\__last_config.ini"):
     config = configparser.ConfigParser()
     config["Team1"] = {}
     config["Team2"] = {}
     config["Timer"] = {}
 
     config["Team1"]["team_name"] = get_text(0)
-    for i in range(1, 16):
+    for i in range(1, 17):
         config["Team1"]["player {}".format(i)] = get_text(i)
     config["Team2"]["team_name"] = get_text(17)
-    for i in range(18, 33):
+    for i in range(18, 34):
         config["Team2"]["player {}".format(i)] = get_text(i)
     config["Timer"]["main_timer"] = get_text(34)
 
@@ -36,7 +36,7 @@ def save_configuration(configfile="..\\data\\last_configuration.ini"):
         config.write(file)
 
 
-def load_configuration(configuration="..\\data\\last_configuration.ini"):
+def load_configuration(configuration="..\\data\\__last_config.ini"):
     config = configparser.ConfigParser()
     config.read(configuration)
 
@@ -49,10 +49,10 @@ def load_configuration(configuration="..\\data\\last_configuration.ini"):
 
     try:
         widgets[0].document.text = config["Team1"]["team_name"]
-        for i in range(1, 16):
+        for i in range(1, 17):
             widgets[i].document.text = config["Team1"]["player {}".format(i)]
         widgets[17].document.text = config["Team2"]["team_name"]
-        for i in range(18, 33):
+        for i in range(18, 34):
             widgets[i].document.text = config["Team2"]["player {}".format(i)]
         widgets[34].document.text = config["Timer"]["main_timer"]
     except (configparser.MissingSectionHeaderError, KeyError):  # todo might exist more exceptions
@@ -114,21 +114,31 @@ def get_text(widget: int) -> str:
 
 
 def start_table() -> bool:
-    import table
     try:
-        table.prepare_table(int(get_text(34)),
-                            [get_text(i) for i in range(1, 16) if get_text(i)],
-                            [get_text(i) for i in range(18, 32) if get_text(i)],
-                            get_text(0),
-                            get_text(17))
+        time = int(get_text(34))
     except ValueError:
         print("Main timer has to be an integer.")
         return False
-    else:
-        import main_window
-        import second_window
-        main_window.main_window.activate()
-        return True
+
+    players_introduced = [get_text(i) for i in list(range(1, 17)) + list(range(18, 34)) if get_text(i)]
+    if len(list(filter(lambda text: len(text) <= 11, players_introduced))) < len(players_introduced):
+        print("Players' names cannot exceed 11 characters.")
+        return False
+
+    if len(get_text(0)) > 22 or len(get_text(17)) > 22:
+        print("Teams' names cannot exceed 22 characters.")
+        return False
+
+    import table
+    table.prepare_table(time,
+                        [get_text(i) for i in range(1, 17) if get_text(i)],
+                        [get_text(i) for i in range(18, 34) if get_text(i)],
+                        get_text(0),
+                        get_text(17))
+    import main_window
+    import second_window
+    main_window.main_window.activate()
+    return True
 
 
 def menu_scene():
@@ -223,9 +233,9 @@ def prepare_game_scene():
         elif button2.pressed(x, y):
             switch_scene(menu_scene, update)
         elif button3.pressed(x, y):
-            load_configuration("..\\data\\{}.ini".format(get_text(35)))
+            load_configuration("..\\data\\custom_configs\\{}.ini".format(get_text(35)))
         elif button4.pressed(x, y):
-            save_configuration("..\\data\\{}.ini".format(get_text(36)))
+            save_configuration("..\\data\\custom_configs\\{}.ini".format(get_text(36)))
         elif button5.pressed(x, y):
             if start_table():  # open the actual table interface thingy... what am I saying
                 save_configuration()

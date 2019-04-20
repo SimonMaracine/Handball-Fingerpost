@@ -21,7 +21,8 @@ class Player:
                                              font_size=18)
         self.suspend_text = pyglet.text.Label("[{}]".format(self.id),
                                               font_name="Calibri",
-                                              font_size=18)
+                                              font_size=18,
+                                              color=(255, 190, 255, 255))
         self.suspend_timer = None  # player timer
         self.selected = False
 
@@ -33,8 +34,8 @@ class Player:
             draw.rect((190 if self.team_side == "left" else 800 - 80) + i * 14, y, 8, 15, (255, 255, 0, 255))
 
     def render_suspended(self, y):
-        self.suspend_text.x = 276 if self.team_side == "left" else 426
-        self.suspend_text.y = y
+        self.suspend_text.x = 273 if self.team_side == "left" else 423
+        self.suspend_text.y = y + 5
 
         if self.suspended:
             self.suspend_text.draw()
@@ -42,7 +43,7 @@ class Player:
                 self.suspend_timer.render()
 
         if self.suspend_timer is not None:
-            self.suspend_timer.y = y
+            self.suspend_timer.y = self.suspend_text.y - 2
             if self.suspend_timer.finished:
                 self.release()
 
@@ -53,7 +54,7 @@ class Player:
     def suspend(self, timer: countdown.Timer):
         if not self.suspended:
             self.suspended = True
-            self.suspend_timer = countdown.Timer(314 if self.team_side == "left" else 464, -100, 20, 60 * 2)  # todo not that good
+            self.suspend_timer = countdown.Timer(315 if self.team_side == "left" else 465, -100, 20, 60 * 2)  # todo not that good
             if timer.running:
                 self.suspend_timer.start()
 

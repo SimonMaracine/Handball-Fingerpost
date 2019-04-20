@@ -4,4 +4,4 @@ __pycache__/
 *.pyc
 *.exe
 *.ini
-!data/settings.ini
+!data/__settings.ini

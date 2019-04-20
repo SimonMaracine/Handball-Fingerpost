@@ -24,14 +24,14 @@ class Table:
         self.timer = countdown.Timer(WIDTH // 2 - 92, HEIGHT // 2 + 180, 60, 60 * time)  # main timer
         self.time_out_timer = None  # time-out timer
         self.game_round = 1
-        self.round_text = pyglet.text.Label(str(self.game_round), font_name="Calibri", font_size=90, x=334, y=304)
+        self.round_text = pyglet.text.Label(str(self.game_round), font_name="Calibri", font_size=90, x=367, y=315)
         self.player_panel = None
 
         self.players1 = [Player(players1[i], i + 1, "left") for i in range(len(players1))]
         self.players2 = [Player(players2[i], i + len(players1) + 1, "right") for i in range(len(players2))]
 
-        self.team1 = team.Team(team1, self.players1, 30, HEIGHT - 130, 110, 362)
-        self.team2 = team.Team(team2, self.players2, 565, HEIGHT - 130, 590, 362)
+        self.team1 = team.Team(team1, self.players1, 30, HEIGHT - 130, 110, 374)
+        self.team2 = team.Team(team2, self.players2, 565, HEIGHT - 130, 590, 374)
 
         self.button1 = Button(360, 60, "first button", 14)
         self.buttons = ()
@@ -52,12 +52,12 @@ class Table:
         self.round_text.draw()
 
     @staticmethod
-    def show_players(players):
+    def show_players(players: list):
         for i, player in enumerate(players):
             player.render((-i + 13) * 23)
 
     @staticmethod
-    def show_suspended_players(players):
+    def show_suspended_players(players: list):
         suspended_players = list(filter(lambda player: player.suspended, players))
         for i, player in enumerate(suspended_players):
             player.render_suspended((-len(suspended_players) + i + 12) * 23)
@@ -112,7 +112,7 @@ class Table:
             player.update_button(WIDTH - 240, (-i + 13) * 23)
 
     @staticmethod
-    def update_players_timers(func: str, players):
+    def update_players_timers(func: str, players: list):
         suspended_players = filter(lambda player: player.suspended, players)
         if func == "start":
             for player_timer in map(lambda player: player.suspend_timer, suspended_players):
@@ -125,7 +125,7 @@ class Table:
                 player.release()
 
     def advance_round(self, x: int):
-        if x == -1 and self.game_round <= 1:
+        if (x == -1 and self.game_round <= 1) or (x == 1 and self.game_round >= 9):
             return
         self.game_round += x
 
