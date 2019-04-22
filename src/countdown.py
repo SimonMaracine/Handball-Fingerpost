@@ -2,7 +2,7 @@ import pyglet
 
 
 class Timer:
-    def __init__(self, x, y, size, time=1200):
+    def __init__(self, x, y, size, time=1200, sound=None):
         self.x = x
         self.y = y
         self.size = size
@@ -14,6 +14,7 @@ class Timer:
                                        font_name="Calibri",
                                        font_size=self.size,
                                        x=self.x, y=self.y)
+        self.sound = sound
 
     @staticmethod
     def show(countdown) -> str:
@@ -28,9 +29,14 @@ class Timer:
     def update(self, dt):
         self.timer.text = __class__.show(self.countdown)
         self.timer.y = self.y
+
         if self.countdown > 0:
+            if self.countdown == 10 and self.sound is not None:
+                self.sound.play()
             self.countdown -= 1
         else:
+            if self.sound is not None:
+                self.sound.play()
             self.finished = True
             self.running = False
             pyglet.clock.unschedule(self.update)

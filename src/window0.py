@@ -137,6 +137,7 @@ def start_table() -> bool:
                         get_text(17))
     import main_window
     import second_window
+    second_window.start()
     main_window.main_window.activate()
     return True
 

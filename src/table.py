@@ -9,6 +9,7 @@ from player_panel import PlayerPanel
 WIDTH = 800
 HEIGHT = 600
 table = None
+sound = pyglet.media.load("..\\sounds\\sound.wav", streaming=False)
 
 
 class Table:
@@ -21,7 +22,7 @@ class Table:
             team1 = "Home"
         if not team2 or team2.isspace():
             team2 = "Guest"
-        self.timer = countdown.Timer(WIDTH // 2 - 92, HEIGHT // 2 + 180, 60, 60 * time)  # main timer
+        self.timer = countdown.Timer(WIDTH // 2 - 92, HEIGHT // 2 + 180, 60, 60 * time, sound)  # main timer
         self.time_out_timer = None  # time-out timer
         self.game_round = 1
         self.round_text = pyglet.text.Label(str(self.game_round), font_name="Calibri", font_size=90, x=367, y=315)

@@ -26,6 +26,7 @@ def on_draw():
 
 @main_window.event
 def on_key_press(symbol, modifiers):
+    global fullscreen
     if symbol == key.SPACE and table.time_out_timer is None:
         if not table.timer.running:
             table.timer.start()
@@ -49,7 +50,7 @@ def on_key_press(symbol, modifiers):
     elif symbol == key.T:  # todo check existing time-out first!
         table.team1.request_time_out()
         if table.timer.running:
-            table.time_out_timer = countdown.Timer(WIDTH//2 - 82, HEIGHT//2 + 185, 55, 60)  # 1 minute countdown
+            table.time_out_timer = countdown.Timer(WIDTH//2 - 82, HEIGHT//2 + 185, 55, 60, sound)  # 1 minute countdown
             table.timer.pause()
             table.update_players_timers("pause", table.get_players())
         if table.time_out_timer is not None:
@@ -60,7 +61,7 @@ def on_key_press(symbol, modifiers):
     elif symbol == key.Y:
         table.team2.request_time_out()
         if table.timer.running:
-            table.time_out_timer = countdown.Timer(WIDTH//2 - 82, HEIGHT//2 + 185, 55, 60)  # 1 minute countdown
+            table.time_out_timer = countdown.Timer(WIDTH//2 - 82, HEIGHT//2 + 185, 55, 60, sound)  # 1 minute countdown
             table.timer.pause()
             table.update_players_timers("pause", table.get_players())
         if table.time_out_timer is not None:
@@ -72,6 +73,16 @@ def on_key_press(symbol, modifiers):
         table.timer.restart()
         table.time_out_timer = None
         table.update_players_timers("release", table.get_players())
+    elif symbol == key.F:
+        if not fullscreen:
+            main_window.set_fullscreen(True, width=WIDTH, height=HEIGHT)
+            fullscreen = True
+        else:
+            main_window.set_fullscreen(False, width=WIDTH, height=HEIGHT)
+            fullscreen = False
+    elif symbol == key.W:
+        import second_window
+        second_window.start()
 
 
 @main_window.event
@@ -101,7 +112,9 @@ main_window.set_icon(icon1, icon2)
 main_window.set_visible(True)
 
 background = pyglet.image.load("..\\gfx\\table2.png")
+sound = pyglet.media.load("..\\sounds\\sound.wav", streaming=False)
 
 closed = False
+fullscreen = False
 fps = pyglet.clock.ClockDisplay()
 pyglet.clock.schedule_interval(table.update, 1 / 48)
