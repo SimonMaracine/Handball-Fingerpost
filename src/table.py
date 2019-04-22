@@ -5,9 +5,8 @@ import team
 from player import Player
 from button import Button
 from player_panel import PlayerPanel
+from config import WIDTH, HEIGHT
 
-WIDTH = 800
-HEIGHT = 600
 table = None
 sound = pyglet.media.load("..\\sounds\\sound.wav", streaming=False)
 
@@ -53,9 +52,13 @@ class Table:
         self.round_text.draw()
 
     @staticmethod
-    def show_players(players: list):
-        for i, player in enumerate(players):
-            player.render((-i + 13) * 23)
+    def show_players(players: list, btn=True):
+        if btn:
+            for i, player in enumerate(players):
+                player.render((-i + 13) * 23)
+        else:
+            for i, player in enumerate(players):
+                player.render2((-i + 13) * 23)
 
     @staticmethod
     def show_suspended_players(players: list):

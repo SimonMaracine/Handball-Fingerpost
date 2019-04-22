@@ -33,6 +33,12 @@ class Player:
         for i in range(self.yellow_cards):
             draw.rect((190 if self.team_side == "left" else 800 - 80) + i * 14, y, 8, 15, (255, 255, 0, 255))
 
+    def render2(self, y):
+        self.update(y)
+        self.player_text.draw()
+        for i in range(self.yellow_cards):
+            draw.rect((190 if self.team_side == "left" else 800 - 80) + i * 14, y, 8, 15, (255, 255, 0, 255))
+
     def render_suspended(self, y):
         self.suspend_text.x = 273 if self.team_side == "left" else 423
         self.suspend_text.y = y + 5

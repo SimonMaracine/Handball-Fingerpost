@@ -1,7 +1,11 @@
 import pyglet
 from pyglet.window import key
 
-from table import Table, table, WIDTH, HEIGHT
+from table import Table, table
+import config
+from config import WIDTH, HEIGHT
+
+second_window = None
 
 
 def start():
@@ -16,13 +20,13 @@ def start():
         table.team2.render()
         table.show_timers()
         table.show_round()
-        Table.show_players(table.get_players("left"))
-        Table.show_players(table.get_players("right"))
+        Table.show_players(table.get_players("left"), False)
+        Table.show_players(table.get_players("right"), False)
         Table.show_suspended_players(table.get_players("left"))
         Table.show_suspended_players(table.get_players("right"))
 
     @second_window.event
-    def on_key_press(symbol, modifiers):
+    def on_key_release(symbol, modifiers):
         global fullscreen
         if symbol == key.F:
             if len(monitors) >= 2:
@@ -32,6 +36,10 @@ def start():
                 else:
                     second_window.set_fullscreen(False, monitors[1], width=WIDTH, height=HEIGHT)
                     fullscreen = False
+
+    @second_window.event
+    def on_close():
+        config.num_second_windows -= 1
 
     display = pyglet.window.get_platform().get_default_display()
     monitors = display.get_screens()
@@ -46,3 +54,4 @@ def start():
 
     background = pyglet.image.load("..\\gfx\\table2.png")
     fullscreen = False
+    config.num_second_windows += 1

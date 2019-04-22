@@ -5,10 +5,9 @@ from pyglet.window import mouse
 
 from text_entry import TextWidget
 from button import Button
+from config import WIDTH, HEIGHT
 
-WIDTH = 800
-HEIGHT = 600
-window0 = pyglet.window.Window(WIDTH, HEIGHT, "Handball Score Table (first)", vsync=True)
+window0 = None
 
 
 def switch_scene(scene, *args):
@@ -137,12 +136,16 @@ def start_table() -> bool:
                         get_text(17))
     import main_window
     import second_window
+    main_window.start()
     second_window.start()
     main_window.main_window.activate()
     return True
 
 
 def menu_scene():
+    global window0
+    window0 = pyglet.window.Window(WIDTH, HEIGHT, "Handball Score Table (first)", vsync=True)
+
     button1 = Button(WIDTH // 2 - 140, HEIGHT // 2 + 60, "Configure Table", 40, (0, 0, 0, 255), secondary_color=(200, 200, 200, 255))
     button2 = Button(WIDTH // 2 - 140, HEIGHT // 2, "Settings", 40, (0, 0, 0, 255), secondary_color=(200, 200, 200, 255))
     buttons = (button1, button2)
@@ -159,7 +162,7 @@ def menu_scene():
             button.render()
 
     @window0.event
-    def on_mouse_press(x, y, button, modifiers):
+    def on_mouse_release(x, y, button, modifiers):
         if button == mouse.LEFT:
             # print(x, y)
             if button1.pressed(x, y):
@@ -173,7 +176,7 @@ def menu_scene():
             button.pressed(x, y)
 
     @window0.event
-    def on_key_press(symbol, modifiers):
+    def on_key_release(symbol, modifiers):
         if symbol == pyglet.window.key.ESCAPE:
             pyglet.app.exit()
 
@@ -220,7 +223,7 @@ def prepare_game_scene():
             button.pressed(x, y)
 
     @window0.event
-    def on_mouse_press(x, y, button, modifiers):
+    def on_mouse_release(x, y, button, modifiers):
         for widget in widgets:
             if widget.hit_test(x, y):
                 set_focus(widget)
@@ -264,7 +267,7 @@ def prepare_game_scene():
             focus.caret.on_text_motion_select(motion)
 
     @window0.event
-    def on_key_press(symbol, modifiers):
+    def on_key_release(symbol, modifiers):
         if symbol == pyglet.window.key.TAB:
             if modifiers & pyglet.window.key.MOD_SHIFT:
                 direction = -1
