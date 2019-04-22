@@ -95,6 +95,8 @@ class Table:
             if btn.pressed(x, y):
                 # print("player {}".format(i + 1))
                 if players[i].select() == "selected":  # select the clicked player
+                    y = 140 if y < 140 else y  # change player panel's position to not spawn over the down an left edges
+                    x = WIDTH - 160 if x > WIDTH - 160 else x
                     self.player_panel = PlayerPanel(x, y, players[i], (self.team1, self.team2))
                     if len(list(filter(lambda player: player.selected, players))) == 2:
                         Player.de_select(players, i)  # de-select previous clicked player

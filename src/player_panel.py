@@ -54,14 +54,14 @@ class PlayerPanel:
                         if player == self.player:
                             self.teams[i].score_up()
                             return True
-            if self.buttons[1].pressed(x, y):
+            elif self.buttons[1].pressed(x, y):
                 self.player.team_score(False)
                 for i, team in enumerate(self.teams):
                     for player in self.teams[i].players:
                         if player == self.player:
                             self.teams[i].score_down()
                             return True
-            if self.buttons[2].pressed(x, y):
+            elif self.buttons[2].pressed(x, y):
                 self.player.suspend(timer)
                 return True
             elif self.buttons[3].pressed(x, y):
