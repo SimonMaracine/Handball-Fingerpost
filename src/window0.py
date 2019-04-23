@@ -11,10 +11,10 @@ window0 = None
 
 
 def switch_scene(scene, *args):
-    for func in args:
+    for func in args[1:]:
         pyglet.clock.unschedule(func)
     if scene is not None:
-        scene()
+        scene(args[0])
 
 
 def save_configuration(configfile="..\\data\\__last_config.ini"):
@@ -142,9 +142,10 @@ def start_table() -> bool:
     return True
 
 
-def menu_scene():
+def menu_scene(*args):
     global window0
-    window0 = pyglet.window.Window(WIDTH, HEIGHT, "Handball Score Table (first)", vsync=True)
+    if args[0]:
+        window0 = pyglet.window.Window(WIDTH, HEIGHT, "Handball Score Table (first)", vsync=True)
 
     button1 = Button(WIDTH // 2 - 140, HEIGHT // 2 + 60, "Configure Table", 40, (0, 0, 0, 255), secondary_color=(200, 200, 200, 255))
     button2 = Button(WIDTH // 2 - 140, HEIGHT // 2, "Settings", 40, (0, 0, 0, 255), secondary_color=(200, 200, 200, 255))
@@ -166,7 +167,7 @@ def menu_scene():
         if button == mouse.LEFT:
             # print(x, y)
             if button1.pressed(x, y):
-                switch_scene(prepare_game_scene, update)
+                switch_scene(prepare_game_scene, True, update)
             elif button2.pressed(x, y):
                 pass
 
@@ -187,7 +188,7 @@ def menu_scene():
     pyglet.clock.schedule_interval(update, 1)
 
 
-def prepare_game_scene():
+def prepare_game_scene(*args):
     global widgets, batch, focus
 
     button1 = Button(30, HEIGHT - 65, "Load last configuration", 16, (0, 0, 0, 255), secondary_color=(200, 200, 200, 255))
@@ -235,7 +236,7 @@ def prepare_game_scene():
         if button1.pressed(x, y):
             load_configuration()
         elif button2.pressed(x, y):
-            switch_scene(menu_scene, update)
+            switch_scene(menu_scene, False, update)
         elif button3.pressed(x, y):
             load_configuration("..\\data\\custom_configs\\{}.ini".format(get_text(35)))
         elif button4.pressed(x, y):
@@ -300,6 +301,3 @@ def prepare_game_scene():
     text_cursor = window0.get_system_mouse_cursor('text')
     focus = None
     set_focus(widgets[0])
-
-
-switch_scene(menu_scene)

@@ -3,7 +3,7 @@ from pyglet.window import key, mouse
 import countdown
 from table import Table, table
 import second_window
-import window0
+# import window0
 import config
 from config import WIDTH, HEIGHT
 
@@ -91,7 +91,8 @@ def start():
             if config.num_second_windows < 1:
                 second_window.start()
         elif symbol == key.B:
-            window0.menu_scene()
+            import window0
+            window0.switch_scene(window0.menu_scene, True)
             main_window.close()
             second_window.second_window.close()
 
