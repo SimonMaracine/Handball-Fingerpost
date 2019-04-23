@@ -7,7 +7,7 @@ from player_panel import PlayerPanel
 from config import WIDTH, HEIGHT
 
 table = None
-sound = pyglet.media.load("..\\sounds\\sound.wav", streaming=False)
+sound = pyglet.media.load("sounds\\sound.wav", streaming=False)
 
 
 class Table:

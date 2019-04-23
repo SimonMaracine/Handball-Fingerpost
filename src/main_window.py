@@ -158,18 +158,18 @@ def start():
     def on_close():
         pyglet.app.exit()
 
-    icon1 = pyglet.image.load("..\\gfx\\icon1.png")  # window icons
-    icon2 = pyglet.image.load("..\\gfx\\icon2.png")
+    icon1 = pyglet.image.load("gfx\\icon1.png")  # window icons
+    icon2 = pyglet.image.load("gfx\\icon2.png")
     main_window.set_icon(icon1, icon2)
     main_window.set_visible(True)
 
-    background = pyglet.image.load("..\\gfx\\table2.png")
-    sound = pyglet.media.load("..\\sounds\\sound.wav", streaming=False)
-    img1 = pyglet.image.load("..\\gfx\\start_stop_button.png")
-    img2 = pyglet.image.load("..\\gfx\\restart_button.png")
-    img3 = pyglet.image.load("..\\gfx\\time_out_button.png")
-    img4 = pyglet.image.load("..\\gfx\\arrow_button.png")
-    img5 = pyglet.image.load("..\\gfx\\arrow_button2.png")
+    background = pyglet.image.load("gfx\\table2.png")
+    sound = pyglet.media.load("sounds\\sound.wav", streaming=False)
+    img1 = pyglet.image.load("gfx\\start_stop_button.png")
+    img2 = pyglet.image.load("gfx\\restart_button.png")
+    img3 = pyglet.image.load("gfx\\time_out_button.png")
+    img4 = pyglet.image.load("gfx\\arrow_button.png")
+    img5 = pyglet.image.load("gfx\\arrow_button2.png")
 
     start_stop = Button(265, 400, "", 0, image=img1, secondary_color=(200, 200, 200, 255))
     start_stop.width = img1.width

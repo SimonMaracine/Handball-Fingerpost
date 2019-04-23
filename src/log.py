@@ -1,7 +1,7 @@
 import sys
 import logging
 
-logging.basicConfig(filename="..\\data\\__log.txt", format="\n%(asctime)s:%(levelname)s:%(message)s")
+logging.basicConfig(filename="data\\__log.txt", format="\n%(asctime)s:%(levelname)s:%(message)s")
 
 
 def exception_hook(exc_type, exc_value, exc_traceback):

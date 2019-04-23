@@ -17,7 +17,7 @@ def switch_scene(scene, *args):
         scene(args[0])
 
 
-def save_configuration(configfile="..\\data\\__last_config.ini"):
+def save_configuration(configfile="data\\__last_config.ini"):
     config = configparser.ConfigParser()
     config["Team1"] = {}
     config["Team2"] = {}
@@ -35,7 +35,7 @@ def save_configuration(configfile="..\\data\\__last_config.ini"):
         config.write(file)
 
 
-def load_configuration(configuration="..\\data\\__last_config.ini"):
+def load_configuration(configuration="data\\__last_config.ini"):
     config = configparser.ConfigParser()
     config.read(configuration)
 
@@ -229,11 +229,11 @@ def prepare_game_scene(*args):
         elif button2.pressed(x, y):
             switch_scene(menu_scene, False)
         elif button3.pressed(x, y):
-            load_configuration("..\\data\\custom_configs\\{}.ini".format(get_text(35)))
+            load_configuration("data\\custom_configs\\{}.ini".format(get_text(35)))
         elif button4.pressed(x, y):
-            save_configuration("..\\data\\custom_configs\\{}.ini".format(get_text(36)))
+            save_configuration("data\\custom_configs\\{}.ini".format(get_text(36)))
         elif button5.pressed(x, y):
-            if start_table():  # open the actual table interface thingy... what am I saying
+            if start_table():  # open the actual table interface thingywhat am I saying
                 save_configuration()
                 switch_scene(None)
                 window0.close()
@@ -293,5 +293,5 @@ def prepare_game_scene(*args):
     set_focus(widgets[0])
 
 
-icon1 = pyglet.image.load("..\\gfx\\icon1.png")  # window icons
-icon2 = pyglet.image.load("..\\gfx\\icon2.png")
+icon1 = pyglet.image.load("gfx\\icon1.png")  # window icons
+icon2 = pyglet.image.load("gfx\\icon2.png")
