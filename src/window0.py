@@ -151,9 +151,9 @@ def menu_scene(*args):
     button2 = Button(WIDTH // 2 - 140, HEIGHT // 2, "Settings", 40, (0, 0, 0, 255), secondary_color=(200, 200, 200, 255))
     buttons = (button1, button2)
 
-    def update(dt):
-        # print("menu_scene")
-        pass
+    # def update(dt):
+    #     # print("menu_scene")
+    #     pass
 
     @window0.event
     def on_draw():
@@ -167,7 +167,7 @@ def menu_scene(*args):
         if button == mouse.LEFT:
             # print(x, y)
             if button1.pressed(x, y):
-                switch_scene(prepare_game_scene, True, update)
+                switch_scene(prepare_game_scene, True)
             elif button2.pressed(x, y):
                 pass
 
@@ -185,7 +185,7 @@ def menu_scene(*args):
     def on_close():
         pyglet.app.exit()
 
-    pyglet.clock.schedule_interval(update, 1)
+    # pyglet.clock.schedule_interval(update, 1)
 
 
 def prepare_game_scene(*args):
@@ -195,12 +195,12 @@ def prepare_game_scene(*args):
     button2 = Button(30, HEIGHT - 35, "Back", 16, (0, 0, 0, 255), secondary_color=(200, 200, 200, 255))
     button3 = Button(310, HEIGHT - 65, "Load custom configuration", 16, (0, 0, 0, 255), secondary_color=(200, 200, 200, 255))
     button4 = Button(310, HEIGHT - 35, "Save custom configuration", 16, (0, 0, 0, 255), secondary_color=(200, 200, 200, 255))
-    button5 = Button(580, HEIGHT - 335, "Start game", 26, (0, 0, 0, 255), secondary_color=(200, 200, 200, 255))
+    button5 = Button(580, HEIGHT - 335, "Start match", 26, (0, 0, 0, 255), secondary_color=(200, 200, 200, 255))
     buttons = (button1, button2, button3, button4, button5)
 
-    def update(dt):
-        # print("prepare_game_scene")
-        pass
+    # def update(dt):
+    #     # print("prepare_game_scene")
+    #     pass
 
     @window0.event
     def on_draw():
@@ -236,7 +236,7 @@ def prepare_game_scene(*args):
         if button1.pressed(x, y):
             load_configuration()
         elif button2.pressed(x, y):
-            switch_scene(menu_scene, False, update)
+            switch_scene(menu_scene, False)
         elif button3.pressed(x, y):
             load_configuration("..\\data\\custom_configs\\{}.ini".format(get_text(35)))
         elif button4.pressed(x, y):
@@ -244,7 +244,7 @@ def prepare_game_scene(*args):
         elif button5.pressed(x, y):
             if start_table():  # open the actual table interface thingy... what am I saying
                 save_configuration()
-                switch_scene(None, update)
+                switch_scene(None)
                 window0.close()
 
     @window0.event
@@ -285,7 +285,7 @@ def prepare_game_scene(*args):
         elif symbol == pyglet.window.key.ENTER:
             if start_table():  # open the actual table interface thingy... what am I saying
                 save_configuration()
-                switch_scene(None, update)
+                switch_scene(None)
                 window0.close()
         elif symbol == pyglet.window.key.ESCAPE:
             pyglet.app.exit()
@@ -294,7 +294,7 @@ def prepare_game_scene(*args):
     def on_close():
         pyglet.app.exit()
 
-    pyglet.clock.schedule_interval(update, 1)
+    # pyglet.clock.schedule_interval(update, 1)
     batch = pyglet.graphics.Batch()
     create_labels()
     widgets = create_widgets()

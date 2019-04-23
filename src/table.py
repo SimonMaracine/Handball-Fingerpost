@@ -3,7 +3,6 @@ import pyglet
 import countdown
 import team
 from player import Player
-from button import Button
 from player_panel import PlayerPanel
 from config import WIDTH, HEIGHT
 
@@ -33,8 +32,6 @@ class Table:
         self.team1 = team.Team(team1, self.players1, 30, HEIGHT - 130, 110, 374)
         self.team2 = team.Team(team2, self.players2, 565, HEIGHT - 130, 590, 374)
 
-        self.button1 = Button(360, 60, "first button", 14)
-        self.buttons = ()
         self.init_player_buttons()
 
     def update(self, dt):
@@ -65,10 +62,6 @@ class Table:
         suspended_players = list(filter(lambda player: player.suspended, players))
         for i, player in enumerate(suspended_players):
             player.render_suspended((-len(suspended_players) + i + 12) * 23)
-
-    def show_buttons(self):
-        for button in self.buttons:
-            button.render()
 
     def show_timers(self):
         if self.time_out_timer is None:

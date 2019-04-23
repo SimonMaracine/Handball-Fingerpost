@@ -1,5 +1,6 @@
 import pyglet
 import window0
+import log
 
 VERSION = "v0.0"
 

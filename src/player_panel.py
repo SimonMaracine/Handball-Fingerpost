@@ -16,7 +16,7 @@ class PlayerPanel:
                                      True, True, (160, 160, 160, 255))
         self.release_button = Button(x + 20, y + 30 - 44, "Release", 16, (16, 255, 16, 255),
                                      True, True, (160, 160, 160, 255))
-        self.yellow_card_button = Button(x + 20, y + 30 - 66, "+ Yellow card", 16, (214, 214, 16, 255),
+        self.yellow_card_button = Button(x + 20, y + 30 - 66, "+ Yellow card", 16, (226, 226, 17, 255),
                                          True, True, (160, 160, 160, 255))
         self.yellow_button2 = Button(x + 20, y + 30 - 88, "- Yellow card", 16, (255, 255, 16, 255),
                                      True, True, (160, 160, 160, 255))
@@ -41,7 +41,7 @@ class PlayerPanel:
         self.height = 23 * len(self.buttons)
 
     def render(self):
-        draw.rect(self.x + 14, self.y - 15 * (len(self.buttons)), self.width, self.height, (255, 255, 255, 255))
+        draw.rect(self.x + 14, self.y - 15 * (len(self.buttons)), self.width, self.height, (205, 200, 205, 255))
         for button in self.buttons:
             button.render()
 

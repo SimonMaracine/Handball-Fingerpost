@@ -3,6 +3,7 @@ import pyglet
 from button import Button
 import countdown
 import draw
+from config import WIDTH
 
 
 class Player:
@@ -23,6 +24,10 @@ class Player:
                                               font_name="Calibri",
                                               font_size=18,
                                               color=(255, 190, 255, 255))
+        self.scores_text = pyglet.text.Label(str(self.scores),
+                                             font_name="Calibri",
+                                             font_size=18,
+                                             color=(216, 200, 255, 255))
         self.suspend_timer = None  # player timer
         self.selected = False
 
@@ -30,14 +35,16 @@ class Player:
         self.update(y)
         self.button.render(False)
         self.player_text.draw()
+        self.scores_text.draw()
         for i in range(self.yellow_cards):
-            draw.rect((190 if self.team_side == "left" else 800 - 80) + i * 14, y, 8, 15, (255, 255, 0, 255))
+            draw.rect((220 if self.team_side == "left" else WIDTH - 50) + i * 14, y, 8, 15, (255, 255, 0, 255))
 
     def render2(self, y):
         self.update(y)
         self.player_text.draw()
+        self.scores_text.draw()
         for i in range(self.yellow_cards):
-            draw.rect((190 if self.team_side == "left" else 800 - 80) + i * 14, y, 8, 15, (255, 255, 0, 255))
+            draw.rect((220 if self.team_side == "left" else WIDTH - 50) + i * 14, y, 8, 15, (255, 255, 0, 255))
 
     def render_suspended(self, y):
         self.suspend_text.x = 273 if self.team_side == "left" else 423
@@ -54,8 +61,11 @@ class Player:
                 self.release()
 
     def update(self, y):
-        self.player_text.x = 32 if self.team_side == "left" else 800 - 238  # todo the WIDTH!
+        self.player_text.x = 32 if self.team_side == "left" else WIDTH - 238
         self.player_text.y = y
+        self.scores_text.text = str(self.scores)
+        self.scores_text.x = 192 if self.team_side == "left" else WIDTH - 80
+        self.scores_text.y = y
 
     def suspend(self, timer: countdown.Timer):
         if not self.suspended:

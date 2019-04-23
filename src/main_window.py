@@ -1,9 +1,12 @@
 import pyglet
 from pyglet.window import key, mouse
+from pyglet.gl import glEnable, glBlendFunc, GL_BLEND, GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA
+
 import countdown
+from button import Button
 from table import Table, table
 import second_window
-# import window0
+import window0
 import config
 from config import WIDTH, HEIGHT
 
@@ -13,6 +16,9 @@ main_window = None
 def start():
     global main_window
     main_window = pyglet.window.Window(WIDTH, HEIGHT, "Handball Score Table", vsync=True, visible=False)
+
+    glEnable(GL_BLEND)
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA)
 
     @main_window.event
     def on_draw():
@@ -26,7 +32,8 @@ def start():
         Table.show_players(table.get_players("right"))
         Table.show_suspended_players(table.get_players("left"))
         Table.show_suspended_players(table.get_players("right"))
-        table.show_buttons()
+        for button in buttons:
+            button.render(False)
         if table.player_panel:
             table.player_panel.render()
         fps.draw()
@@ -47,19 +54,10 @@ def start():
                     table.time_out_timer.pause()
                 else:
                     table.time_out_timer.start()
-        elif symbol == key.LEFT:
-            table.team1.set_name(input("Type first team's name: "))
-        elif symbol == key.RIGHT:
-            table.team2.set_name(input("Type second team's name: "))
-        elif symbol == key.UP:
-            table.timer.set_time(int(input("Time: ")))
         elif symbol == key.A:
             table.advance_round(1)
         elif symbol == key.Z:
             table.advance_round(-1)
-        elif symbol == key.ENTER and table.timer.finished:
-            table.advance_round(1)
-            table.timer.restart()
         elif symbol == key.T:
             if table.timer.running:
                 table.team1.request_time_out()
@@ -77,9 +75,13 @@ def start():
             if table.time_out_timer is not None:
                 table.time_out_timer.start()
         elif symbol == key.R:
-            table.timer.restart()
-            table.time_out_timer = None
-            table.update_players_timers("release", table.get_players())
+            if table.timer.finished:
+                table.advance_round(1)
+                table.timer.restart()
+            else:
+                table.timer.restart()
+                table.time_out_timer = None
+                table.update_players_timers("release", table.get_players())
         elif symbol == key.F:
             if not fullscreen:
                 main_window.set_fullscreen(True, width=WIDTH, height=HEIGHT)
@@ -91,7 +93,6 @@ def start():
             if config.num_second_windows < 1:
                 second_window.start()
         elif symbol == key.B:
-            import window0
             window0.switch_scene(window0.menu_scene, True)
             main_window.close()
             second_window.second_window.close()
@@ -101,6 +102,47 @@ def start():
         if button == mouse.LEFT:
             # print('The left mouse button was pressed at ({}, {}).'.format(x, y))
             table.update_player_functionality(x, y)
+            if buttons[0].pressed(x, y):
+                if table.time_out_timer is None:
+                    if not table.timer.running:
+                        table.timer.start()
+                        table.update_players_timers("start", table.get_players())
+                    else:
+                        table.timer.pause()
+                        table.update_players_timers("pause", table.get_players())
+                else:
+                    if table.time_out_timer.running:
+                        table.time_out_timer.pause()
+                    else:
+                        table.time_out_timer.start()
+            elif buttons[1].pressed(x, y):
+                if table.timer.finished:
+                    table.advance_round(1)
+                    table.timer.restart()
+                else:
+                    table.timer.restart()
+                    table.time_out_timer = None
+                    table.update_players_timers("release", table.get_players())
+            elif buttons[2].pressed(x, y):
+                if table.timer.running:
+                    table.team1.request_time_out()
+                    table.time_out_timer = countdown.Timer(WIDTH // 2 - 82, HEIGHT // 2 + 185, 55, 60, sound)  # 1 minute countdown
+                    table.timer.pause()
+                    table.update_players_timers("pause", table.get_players())
+                if table.time_out_timer is not None:
+                    table.time_out_timer.start()
+            elif buttons[3].pressed(x, y):
+                if table.timer.running:
+                    table.team2.request_time_out()
+                    table.time_out_timer = countdown.Timer(WIDTH // 2 - 82, HEIGHT // 2 + 185, 55, 60, sound)  # 1 minute countdown
+                    table.timer.pause()
+                    table.update_players_timers("pause", table.get_players())
+                if table.time_out_timer is not None:
+                    table.time_out_timer.start()
+            elif buttons[4].pressed(x, y):
+                table.advance_round(1)
+            elif buttons[5].pressed(x, y):
+                table.advance_round(-1)
 
     @main_window.event
     def on_mouse_motion(x, y, dx, dy):  # to update buttons' visuals
@@ -109,6 +151,8 @@ def start():
         if table.player_panel:
             for button in table.player_panel.get_buttons():
                 button.pressed(x, y)
+        for button in buttons:
+            button.pressed(x, y)
 
     @main_window.event
     def on_close():
@@ -121,6 +165,32 @@ def start():
 
     background = pyglet.image.load("..\\gfx\\table2.png")
     sound = pyglet.media.load("..\\sounds\\sound.wav", streaming=False)
+    img1 = pyglet.image.load("..\\gfx\\start_stop_button.png")
+    img2 = pyglet.image.load("..\\gfx\\restart_button.png")
+    img3 = pyglet.image.load("..\\gfx\\time_out_button.png")
+    img4 = pyglet.image.load("..\\gfx\\arrow_button.png")
+    img5 = pyglet.image.load("..\\gfx\\arrow_button2.png")
+
+    start_stop = Button(265, 400, "", 0, image=img1, secondary_color=(200, 200, 200, 255))
+    start_stop.width = img1.width
+    start_stop.height = img1.height
+    restart = Button(474, 400, "", 0, image=img2, secondary_color=(200, 200, 200, 255))
+    restart.width = img2.width
+    restart.height = img2.height
+    time_out1 = Button(40, 375, "", 0, image=img3, secondary_color=(200, 200, 200, 255))
+    time_out1.width = img3.width
+    time_out1.height = img3.height
+    time_out2 = Button(700, 375, "", 0, image=img3, secondary_color=(200, 200, 200, 255))
+    time_out2.width = img3.width
+    time_out2.height = img3.height
+    round_up = Button(470, 360, "", 0, image=img4, secondary_color=(200, 200, 200, 255))
+    round_up.width = img4.width
+    round_up.height = img4.height
+    round_down = Button(470, 315, "", 0, image=img5, secondary_color=(200, 200, 200, 255))
+    round_down.width = img5.width
+    round_down.height = img5.height
+
+    buttons = (start_stop, restart, time_out1, time_out2, round_up, round_down)
 
     fullscreen = False
     fps = pyglet.clock.ClockDisplay()
