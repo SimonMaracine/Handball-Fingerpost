@@ -145,15 +145,12 @@ def start_table() -> bool:
 def menu_scene(*args):
     global window0
     if args[0]:
-        window0 = pyglet.window.Window(WIDTH, HEIGHT, "Handball Score Table (first)", vsync=True)
+        window0 = pyglet.window.Window(WIDTH, HEIGHT, "Handball Score Table", vsync=True)
+        window0.set_icon(icon1, icon2)
 
-    button1 = Button(WIDTH // 2 - 140, HEIGHT // 2 + 60, "Configure Table", 40, (0, 0, 0, 255), secondary_color=(200, 200, 200, 255))
+    button1 = Button(WIDTH // 2 - 140, HEIGHT // 2 + 60, "Configure match", 40, (0, 0, 0, 255), secondary_color=(200, 200, 200, 255))
     button2 = Button(WIDTH // 2 - 140, HEIGHT // 2, "Settings", 40, (0, 0, 0, 255), secondary_color=(200, 200, 200, 255))
     buttons = (button1, button2)
-
-    # def update(dt):
-    #     # print("menu_scene")
-    #     pass
 
     @window0.event
     def on_draw():
@@ -185,8 +182,6 @@ def menu_scene(*args):
     def on_close():
         pyglet.app.exit()
 
-    # pyglet.clock.schedule_interval(update, 1)
-
 
 def prepare_game_scene(*args):
     global widgets, batch, focus
@@ -197,10 +192,6 @@ def prepare_game_scene(*args):
     button4 = Button(310, HEIGHT - 35, "Save custom configuration", 16, (0, 0, 0, 255), secondary_color=(200, 200, 200, 255))
     button5 = Button(580, HEIGHT - 335, "Start match", 26, (0, 0, 0, 255), secondary_color=(200, 200, 200, 255))
     buttons = (button1, button2, button3, button4, button5)
-
-    # def update(dt):
-    #     # print("prepare_game_scene")
-    #     pass
 
     @window0.event
     def on_draw():
@@ -294,10 +285,13 @@ def prepare_game_scene(*args):
     def on_close():
         pyglet.app.exit()
 
-    # pyglet.clock.schedule_interval(update, 1)
     batch = pyglet.graphics.Batch()
     create_labels()
     widgets = create_widgets()
     text_cursor = window0.get_system_mouse_cursor('text')
     focus = None
     set_focus(widgets[0])
+
+
+icon1 = pyglet.image.load("..\\gfx\\icon1.png")  # window icons
+icon2 = pyglet.image.load("..\\gfx\\icon2.png")

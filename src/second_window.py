@@ -10,7 +10,7 @@ second_window = None
 
 def start():
     global second_window
-    second_window = pyglet.window.Window(WIDTH, HEIGHT, "Handball Score Table (second)", vsync=True, visible=False)
+    second_window = pyglet.window.Window(WIDTH, HEIGHT, "Handball Score Table [2]", vsync=True, visible=False)
 
     @second_window.event
     def on_draw():
