@@ -36,7 +36,7 @@ def start():
             button.render(False)
         if table.player_panel:
             table.player_panel.render()
-        fps.draw()
+        # fps.draw()
 
     @main_window.event
     def on_key_release(symbol, modifiers):

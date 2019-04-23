@@ -6,3 +6,6 @@ __pycache__/
 *.ini
 data/__log.txt
 !data/__settings.ini
+dist/
+build/
+*.spec
