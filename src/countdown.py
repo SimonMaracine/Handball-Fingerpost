@@ -40,11 +40,11 @@ class Timer:
             self.finished = True
             self.running = False
             pyglet.clock.unschedule(self.update)
-            print("Time's up!")
+            # print("Time's up!")
 
     def start(self):
         if not self.running:
-            pyglet.clock.schedule_interval(self.update, 0.5)
+            pyglet.clock.schedule_interval(self.update, 1)
             self.running = True
 
     def set_time(self, time=1200):
