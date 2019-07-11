@@ -1,8 +1,9 @@
 import pyglet
-import draw
+import src.draw as draw
 
 
 class TextWidget:
+
     def __init__(self, text, x, y, width, batch):
         self.text = text
         self.x = x

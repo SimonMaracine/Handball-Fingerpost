@@ -1,1 +1,1 @@
-Handball-Score-Table
+Handball Score Table

@@ -1,16 +1,16 @@
 import pyglet
 
-import countdown
-import team
-from player import Player
-from player_panel import PlayerPanel
-from config import WIDTH, HEIGHT
+import src.countdown as countdown
+import src.team as team
+from src.player import Player
+from src.player_panel import PlayerPanel
+from src.config import WIDTH, HEIGHT, ring_sound
 
 table = None
-sound = pyglet.media.load("sounds\\sound.wav", streaming=False)
 
 
 class Table:
+
     def __init__(self, time: int, players1: list, players2: list, team1: str, team2: str):
         if time == 0:
             time = 1
@@ -20,10 +20,10 @@ class Table:
             team1 = "Home"
         if not team2 or team2.isspace():
             team2 = "Guest"
-        self.timer = countdown.Timer(WIDTH // 2 - 92, HEIGHT // 2 + 180, 60, 60 * time, sound)  # main timer
+        self.timer = countdown.Timer(WIDTH // 2 - 92, HEIGHT // 2 + 180, 60, 60 * time, ring_sound)  # main timer
         self.time_out_timer = None  # time-out timer
         self.game_round = 1
-        self.round_text = pyglet.text.Label(str(self.game_round), font_name="Calibri", font_size=90, x=367, y=315)
+        self.round_text = pyglet.text.Label(str(self.game_round), font_name="Open Sans", font_size=90, x=367, y=315)
         self.player_panel = None
 
         self.players1 = [Player(players1[i], i + 1, "left") for i in range(len(players1))]

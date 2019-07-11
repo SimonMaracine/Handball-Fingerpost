@@ -2,6 +2,7 @@ import pyglet
 
 
 class Team:
+
     def __init__(self, name, players, name_x, name_y, score_x, score_y):
         self.name = name
         self.players = players
@@ -11,7 +12,7 @@ class Team:
         self.name_x = name_x
         self.name_y = name_y
         self.team_name = pyglet.text.Label(self.name,
-                                           font_name="Calibri",
+                                           font_name="Open Sans",
                                            font_size=40,
                                            x=name_x, y=name_y)
 
@@ -24,7 +25,7 @@ class Team:
 
         self.score_x = score_x
         self.team_score = pyglet.text.Label(str(self.score),
-                                            font_name="Calibri",
+                                            font_name="Open Sans",
                                             font_size=54,
                                             x=score_x, y=score_y)
 

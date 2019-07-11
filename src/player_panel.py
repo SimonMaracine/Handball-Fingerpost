@@ -1,8 +1,9 @@
-from button import Button
-import draw
+from src.button import Button
+import src.draw as draw
 
 
 class PlayerPanel:
+
     def __init__(self, x, y, player, teams: tuple):
         self.x = x
         self.y = y

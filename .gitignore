@@ -4,8 +4,7 @@ __pycache__/
 *.pyc
 *.exe
 *.ini
-data/__log.txt
-!data/__settings.ini
+!data/_settings.ini
 dist/
 build/
 *.spec

@@ -2,6 +2,7 @@ import pyglet
 
 
 class Timer:
+
     def __init__(self, x, y, size, time=1200, sound=None):
         self.x = x
         self.y = y
@@ -11,7 +12,7 @@ class Timer:
         self.running = False  # for 'starting' the timer only once
         self.finished = False
         self.timer = pyglet.text.Label(__class__.show(self.countdown),
-                                       font_name="Calibri",
+                                       font_name="Open Sans",
                                        font_size=self.size,
                                        x=self.x, y=self.y)
         self.sound = sound

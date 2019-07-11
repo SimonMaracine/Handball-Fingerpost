@@ -1,12 +1,13 @@
 import pyglet
 
-from button import Button
-import countdown
-import draw
-from config import WIDTH
+from src.button import Button
+import src.countdown as countdown
+import src.draw as draw
+from src.config import WIDTH
 
 
 class Player:
+
     def __init__(self, name, id, team_side):
         self.name = name
         self.id = id
@@ -18,14 +19,14 @@ class Player:
         self.disqualified = False
         self.button = None
         self.player_text = pyglet.text.Label("{}[{}]".format(self.name, self.id),
-                                             font_name="Calibri",
+                                             font_name="Open Sans",
                                              font_size=18)
         self.suspend_text = pyglet.text.Label("[{}]".format(self.id),
-                                              font_name="Calibri",
+                                              font_name="Open Sans",
                                               font_size=18,
                                               color=(255, 190, 255, 255))
         self.scores_text = pyglet.text.Label(str(self.scores),
-                                             font_name="Calibri",
+                                             font_name="Open Sans",
                                              font_size=18,
                                              color=(216, 200, 255, 255))
         self.suspend_timer = None  # player timer

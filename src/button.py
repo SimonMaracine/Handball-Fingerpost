@@ -1,8 +1,9 @@
 import pyglet
-import draw
+import src.draw as draw
 
 
 class Button:
+
     def __init__(self, x, y, text, size, color=(255, 255, 255, 255), bold=False, bigger=False, secondary_color=(0, 0, 0, 255), image=None):
         self.x = x
         self.y = y
@@ -13,7 +14,7 @@ class Button:
         self.bigger = bigger
         self.secondary_color = secondary_color
         self.image = image
-        self.button_text = pyglet.text.Label(self.text, font_name="Calibri", font_size=self.size,
+        self.button_text = pyglet.text.Label(self.text, font_name="Open Sans", font_size=self.size,
                                              x=self.x+2, y=self.y+3, color=self.color, bold=self.bold)
         self.width = self.button_text.content_width
         self.height = self.button_text.content_height // 2 + 8

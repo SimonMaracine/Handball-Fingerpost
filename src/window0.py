@@ -1,23 +1,17 @@
+from os.path import join
 import configparser
 
 import pyglet
 from pyglet.window import mouse
 
-from text_entry import TextWidget
-from button import Button
-from config import WIDTH, HEIGHT
+from src.text_entry import TextWidget
+from src.button import Button
+from src.config import WIDTH, HEIGHT, icon1, icon2
 
 window0 = None
 
 
-def switch_scene(scene, *args):
-    for func in args[1:]:
-        pyglet.clock.unschedule(func)
-    if scene is not None:
-        scene(args[0])
-
-
-def save_configuration(configfile="data\\__last_config.ini"):
+def save_configuration(configfile=join("data", "_last_config.ini")):
     config = configparser.ConfigParser()
     config["Team1"] = {}
     config["Team2"] = {}
@@ -35,7 +29,7 @@ def save_configuration(configfile="data\\__last_config.ini"):
         config.write(file)
 
 
-def load_configuration(configuration="data\\__last_config.ini"):
+def load_configuration(configuration=join("data", "_last_config.ini")):
     config = configparser.ConfigParser()
     config.read(configuration)
 
@@ -128,63 +122,25 @@ def start_table() -> bool:
         print("Teams' names cannot exceed 22 characters.")
         return False
 
-    import table
+    import src.table as table
     table.prepare_table(time,
                         [get_text(i) for i in range(1, 17) if get_text(i)],
                         [get_text(i) for i in range(18, 34) if get_text(i)],
                         get_text(0),
                         get_text(17))
-    import main_window
-    import second_window
+    import src.main_window as main_window
+    import src.second_window as second_window
     main_window.start()
     second_window.start()
     main_window.main_window.activate()
     return True
 
 
-def menu_scene(*args):
-    global window0
-    if args[0]:
-        window0 = pyglet.window.Window(WIDTH, HEIGHT, "Handball Score Table", vsync=True)
-        window0.set_icon(icon1, icon2)
+def start():
+    global window0, widgets, batch, focus
 
-    button1 = Button(WIDTH // 2 - 140, HEIGHT // 2 + 60, "Configure match", 40, (0, 0, 0, 255), secondary_color=(200, 200, 200, 255))
-    button2 = Button(WIDTH // 2 - 140, HEIGHT // 2, "Settings", 40, (0, 0, 0, 255), secondary_color=(200, 200, 200, 255))
-    buttons = (button1, button2)
-
-    @window0.event
-    def on_draw():
-        pyglet.gl.glClearColor(0.98, 0.98, 0.98, 1)
-        window0.clear()
-        for button in buttons:
-            button.render()
-
-    @window0.event
-    def on_mouse_release(x, y, button, modifiers):
-        if button == mouse.LEFT:
-            # print(x, y)
-            if button1.pressed(x, y):
-                switch_scene(prepare_game_scene, True)
-            elif button2.pressed(x, y):
-                pass
-
-    @window0.event
-    def on_mouse_motion(x, y, dx, dy):
-        for button in buttons:
-            button.pressed(x, y)
-
-    @window0.event
-    def on_key_release(symbol, modifiers):
-        if symbol == pyglet.window.key.ESCAPE:
-            pyglet.app.exit()
-
-    @window0.event
-    def on_close():
-        pyglet.app.exit()
-
-
-def prepare_game_scene(*args):
-    global widgets, batch, focus
+    window0 = pyglet.window.Window(WIDTH, HEIGHT, "Handball Score Table", vsync=True)
+    window0.set_icon(icon1, icon2)
 
     button1 = Button(30, HEIGHT - 65, "Load last configuration", 16, (0, 0, 0, 255), secondary_color=(200, 200, 200, 255))
     button2 = Button(30, HEIGHT - 35, "Back", 16, (0, 0, 0, 255), secondary_color=(200, 200, 200, 255))
@@ -227,15 +183,14 @@ def prepare_game_scene(*args):
         if button1.pressed(x, y):
             load_configuration()
         elif button2.pressed(x, y):
-            switch_scene(menu_scene, False)
+            pass
         elif button3.pressed(x, y):
-            load_configuration("data\\custom_configs\\{}.ini".format(get_text(35)))
+            load_configuration(join("data", "custom_configs", "{}.ini".format(get_text(35))))
         elif button4.pressed(x, y):
-            save_configuration("data\\custom_configs\\{}.ini".format(get_text(36)))
+            save_configuration(join("data", "custom_configs", "{}.ini".format(get_text(36))))
         elif button5.pressed(x, y):
-            if start_table():  # open the actual table interface thingywhat am I saying
+            if start_table():  # open the actual table interface thingy what am I saying
                 save_configuration()
-                switch_scene(None)
                 window0.close()
 
     @window0.event
@@ -276,7 +231,6 @@ def prepare_game_scene(*args):
         elif symbol == pyglet.window.key.ENTER:
             if start_table():  # open the actual table interface thingy... what am I saying
                 save_configuration()
-                switch_scene(None)
                 window0.close()
         elif symbol == pyglet.window.key.ESCAPE:
             pyglet.app.exit()
@@ -291,7 +245,3 @@ def prepare_game_scene(*args):
     text_cursor = window0.get_system_mouse_cursor('text')
     focus = None
     set_focus(widgets[0])
-
-
-icon1 = pyglet.image.load("gfx\\icon1.png")  # window icons
-icon2 = pyglet.image.load("gfx\\icon2.png")

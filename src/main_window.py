@@ -2,13 +2,14 @@ import pyglet
 from pyglet.window import key, mouse
 from pyglet.gl import glEnable, glBlendFunc, GL_BLEND, GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA
 
-import countdown
-from button import Button
-from table import Table, table
-import second_window
-import window0
-import config
-from config import WIDTH, HEIGHT
+import src.countdown as countdown
+from src.button import Button
+from src.table import Table, table
+import src.second_window as second_window
+import src.window0 as window0
+import src.config as config
+from src.config import WIDTH, HEIGHT, icon1, icon2, background, \
+    img1, img2, img3, img4, img5
 
 main_window = None
 
@@ -40,7 +41,7 @@ def start():
 
     @main_window.event
     def on_key_release(symbol, modifiers):
-        global fullscreen
+        nonlocal fullscreen
         if symbol == key.SPACE:
             if table.time_out_timer is None:
                 if not table.timer.running:
@@ -93,7 +94,8 @@ def start():
             if config.num_second_windows < 1:
                 second_window.start()
         elif symbol == key.B:
-            window0.switch_scene(window0.menu_scene, True)
+            window0.start()
+            window0.window0.activate()
             main_window.close()
             second_window.second_window.close()
 
@@ -158,18 +160,8 @@ def start():
     def on_close():
         pyglet.app.exit()
 
-    icon1 = pyglet.image.load("gfx\\icon1.png")  # window icons
-    icon2 = pyglet.image.load("gfx\\icon2.png")
     main_window.set_icon(icon1, icon2)
     main_window.set_visible(True)
-
-    background = pyglet.image.load("gfx\\table2.png")
-    sound = pyglet.media.load("sounds\\sound.wav", streaming=False)
-    img1 = pyglet.image.load("gfx\\start_stop_button.png")
-    img2 = pyglet.image.load("gfx\\restart_button.png")
-    img3 = pyglet.image.load("gfx\\time_out_button.png")
-    img4 = pyglet.image.load("gfx\\arrow_button.png")
-    img5 = pyglet.image.load("gfx\\arrow_button2.png")
 
     start_stop = Button(265, 400, "", 0, image=img1, secondary_color=(200, 200, 200, 255))
     start_stop.width = img1.width
@@ -193,5 +185,5 @@ def start():
     buttons = (start_stop, restart, time_out1, time_out2, round_up, round_down)
 
     fullscreen = False
-    fps = pyglet.clock.ClockDisplay()
+    # fps = pyglet.clock.ClockDisplay()
     pyglet.clock.schedule_interval(table.update, 1 / 48)
