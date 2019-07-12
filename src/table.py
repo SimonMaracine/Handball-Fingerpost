@@ -20,7 +20,7 @@ class Table:
             team1 = "Home"
         if not team2 or team2.isspace():
             team2 = "Guest"
-        self.timer = countdown.Timer(WIDTH // 2 - 92, HEIGHT // 2 + 180, 60, 60 * time, ring_sound)  # main timer
+        self.timer = countdown.Timer(WIDTH // 2 - 104, HEIGHT // 2 + 180, 60, 60 * time, ring_sound)  # main timer
         self.time_out_timer = None  # time-out timer
         self.game_round = 1
         self.round_text = pyglet.text.Label(str(self.game_round), font_name="Open Sans", font_size=90, x=367, y=315)

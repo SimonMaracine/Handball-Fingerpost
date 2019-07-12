@@ -142,12 +142,11 @@ def start():
     window0 = pyglet.window.Window(WIDTH, HEIGHT, "Handball Score Table", vsync=True)
     window0.set_icon(icon1, icon2)
 
-    button1 = Button(30, HEIGHT - 65, "Load last configuration", 16, (0, 0, 0, 255), secondary_color=(200, 200, 200, 255))
-    button2 = Button(30, HEIGHT - 35, "Back", 16, (0, 0, 0, 255), secondary_color=(200, 200, 200, 255))
-    button3 = Button(310, HEIGHT - 65, "Load custom configuration", 16, (0, 0, 0, 255), secondary_color=(200, 200, 200, 255))
-    button4 = Button(310, HEIGHT - 35, "Save custom configuration", 16, (0, 0, 0, 255), secondary_color=(200, 200, 200, 255))
-    button5 = Button(580, HEIGHT - 335, "Start match", 26, (0, 0, 0, 255), secondary_color=(200, 200, 200, 255))
-    buttons = (button1, button2, button3, button4, button5)
+    button1 = Button(15, HEIGHT - 35, "Load last configuration", 16, (0, 0, 0, 255), secondary_color=(200, 200, 200, 255))
+    button2 = Button(295, HEIGHT - 65, "Load custom configuration", 16, (0, 0, 0, 255), secondary_color=(200, 200, 200, 255))
+    button3 = Button(295, HEIGHT - 35, "Save custom configuration", 16, (0, 0, 0, 255), secondary_color=(200, 200, 200, 255))
+    button4 = Button(570, HEIGHT - 335, "Start match", 26, (0, 0, 0, 255), secondary_color=(200, 200, 200, 255))
+    buttons = (button1, button2, button3, button4)
 
     @window0.event
     def on_draw():
@@ -183,12 +182,10 @@ def start():
         if button1.pressed(x, y):
             load_configuration()
         elif button2.pressed(x, y):
-            pass
-        elif button3.pressed(x, y):
             load_configuration(join("data", "custom_configs", "{}.ini".format(get_text(35))))
-        elif button4.pressed(x, y):
+        elif button3.pressed(x, y):
             save_configuration(join("data", "custom_configs", "{}.ini".format(get_text(36))))
-        elif button5.pressed(x, y):
+        elif button4.pressed(x, y):
             if start_table():  # open the actual table interface thingy what am I saying
                 save_configuration()
                 window0.close()

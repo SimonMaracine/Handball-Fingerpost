@@ -9,7 +9,7 @@ import src.second_window as second_window
 import src.window0 as window0
 import src.config as config
 from src.config import WIDTH, HEIGHT, icon1, icon2, background, \
-    img1, img2, img3, img4, img5
+    img1, img2, img3, img4, img5, ring_sound
 
 main_window = None
 
@@ -62,7 +62,7 @@ def start():
         elif symbol == key.T:
             if table.timer.running:
                 table.team1.request_time_out()
-                table.time_out_timer = countdown.Timer(WIDTH//2 - 82, HEIGHT//2 + 185, 55, 60, sound)  # 1 minute countdown
+                table.time_out_timer = countdown.Timer(WIDTH//2 - 94, HEIGHT//2 + 185, 55, 60, ring_sound)  # 1 minute countdown
                 table.timer.pause()
                 table.update_players_timers("pause", table.get_players())
             if table.time_out_timer is not None:
@@ -70,7 +70,7 @@ def start():
         elif symbol == key.Y:
             if table.timer.running:
                 table.team2.request_time_out()
-                table.time_out_timer = countdown.Timer(WIDTH//2 - 82, HEIGHT//2 + 185, 55, 60, sound)  # 1 minute countdown
+                table.time_out_timer = countdown.Timer(WIDTH//2 - 94, HEIGHT//2 + 185, 55, 60, ring_sound)  # 1 minute countdown
                 table.timer.pause()
                 table.update_players_timers("pause", table.get_players())
             if table.time_out_timer is not None:
@@ -128,7 +128,7 @@ def start():
             elif buttons[2].pressed(x, y):
                 if table.timer.running:
                     table.team1.request_time_out()
-                    table.time_out_timer = countdown.Timer(WIDTH // 2 - 82, HEIGHT // 2 + 185, 55, 60, sound)  # 1 minute countdown
+                    table.time_out_timer = countdown.Timer(WIDTH // 2 - 94, HEIGHT // 2 + 185, 55, 60, ring_sound)  # 1 minute countdown
                     table.timer.pause()
                     table.update_players_timers("pause", table.get_players())
                 if table.time_out_timer is not None:
@@ -136,7 +136,7 @@ def start():
             elif buttons[3].pressed(x, y):
                 if table.timer.running:
                     table.team2.request_time_out()
-                    table.time_out_timer = countdown.Timer(WIDTH // 2 - 82, HEIGHT // 2 + 185, 55, 60, sound)  # 1 minute countdown
+                    table.time_out_timer = countdown.Timer(WIDTH // 2 - 94, HEIGHT // 2 + 185, 55, 60, ring_sound)  # 1 minute countdown
                     table.timer.pause()
                     table.update_players_timers("pause", table.get_players())
                 if table.time_out_timer is not None:

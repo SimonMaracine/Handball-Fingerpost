@@ -8,7 +8,7 @@ from src.config import WIDTH
 
 class Player:
 
-    def __init__(self, name, id, team_side):
+    def __init__(self, name: str, id: int, team_side: str):
         self.name = name
         self.id = id
         self.team_side = team_side
@@ -20,19 +20,19 @@ class Player:
         self.button = None
         self.player_text = pyglet.text.Label("{}[{}]".format(self.name, self.id),
                                              font_name="Open Sans",
-                                             font_size=18)
+                                             font_size=16)
         self.suspend_text = pyglet.text.Label("[{}]".format(self.id),
                                               font_name="Open Sans",
-                                              font_size=18,
+                                              font_size=16,
                                               color=(255, 190, 255, 255))
         self.scores_text = pyglet.text.Label(str(self.scores),
                                              font_name="Open Sans",
-                                             font_size=18,
+                                             font_size=16,
                                              color=(216, 200, 255, 255))
         self.suspend_timer = None  # player timer
         self.selected = False
 
-    def render(self, y):
+    def render(self, y: int):
         self.update(y)
         self.button.render(False)
         self.player_text.draw()
@@ -40,14 +40,14 @@ class Player:
         for i in range(self.yellow_cards):
             draw.rect((220 if self.team_side == "left" else WIDTH - 50) + i * 14, y, 8, 15, (255, 255, 0, 255))
 
-    def render2(self, y):
+    def render2(self, y: int):
         self.update(y)
         self.player_text.draw()
         self.scores_text.draw()
         for i in range(self.yellow_cards):
             draw.rect((220 if self.team_side == "left" else WIDTH - 50) + i * 14, y, 8, 15, (255, 255, 0, 255))
 
-    def render_suspended(self, y):
+    def render_suspended(self, y: int):
         self.suspend_text.x = 273 if self.team_side == "left" else 423
         self.suspend_text.y = y + 5
 
@@ -61,8 +61,8 @@ class Player:
             if self.suspend_timer.finished:
                 self.release()
 
-    def update(self, y):
-        self.player_text.x = 32 if self.team_side == "left" else WIDTH - 238
+    def update(self, y: int):
+        self.player_text.x = 30 if self.team_side == "left" else WIDTH - 240
         self.player_text.y = y
         self.scores_text.text = str(self.scores)
         self.scores_text.x = 192 if self.team_side == "left" else WIDTH - 80
@@ -71,7 +71,7 @@ class Player:
     def suspend(self, timer: countdown.Timer):
         if not self.suspended:
             self.suspended = True
-            self.suspend_timer = countdown.Timer(315 if self.team_side == "left" else 465, -100, 20, 60 * 2)  # todo not that good
+            self.suspend_timer = countdown.Timer(315 if self.team_side == "left" else 465, -100, 17, 60 * 2)  # todo not that good
             if timer.running:
                 self.suspend_timer.start()
 
@@ -97,14 +97,14 @@ class Player:
             self.selected = False
             return "released"
 
-    def update_button(self, x, y):
-        self.button = Button(x, y - 4, "{}[{}]".format(self.name, self.id), 18, (255, 255, 255, 255), False, False, (140, 140, 140, 255))
+    def update_button(self, x: int, y: int):
+        self.button = Button(x - 2, y - 4, "{}[{}]".format(self.name, self.id), 16, (255, 255, 255, 255), False, False, (140, 140, 140, 255))
 
     def get_button(self):
         return self.button
 
     @staticmethod
-    def de_select(players, j=None):
+    def de_select(players: list, j=None):
         if j is not None:
             for i in range(len(players)):
                 if j == i:
@@ -138,9 +138,12 @@ class Player:
         self.disqualified = True
         self.player_text.color = (80, 80, 80, 255)
 
-    def team_score(self, up: bool):
+    def team_score(self, up: bool) -> bool:
         if up is True:
             self.scores += 1
+            return True
         else:
             if self.scores > 0:
                 self.scores -= 1
+                return True
+        return False
