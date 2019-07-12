@@ -1,3 +1,5 @@
+import pprint
+
 import pyglet
 
 import src.countdown as countdown
@@ -11,7 +13,7 @@ table = None
 
 class Table:
 
-    def __init__(self, time: int, players1: list, players2: list, team1: str, team2: str):
+    def __init__(self, time: int, players1: list, players2: list, team1: str, team2: str, players1_numbers: list, players2_numbers: list):
         if time == 0:
             time = 1
         elif time > 60:
@@ -26,8 +28,10 @@ class Table:
         self.round_text = pyglet.text.Label(str(self.game_round), font_name="Open Sans", font_size=90, x=367, y=315)
         self.player_panel = None
 
-        self.players1 = [Player(players1[i], i + 1, "left") for i in range(len(players1))]
-        self.players2 = [Player(players2[i], i + len(players1) + 1, "right") for i in range(len(players2))]
+        self.players1 = [Player(players1[i], players1_numbers[i], "left") for i in range(len(players1))]
+        self.players2 = [Player(players2[i], players2_numbers[i], "right") for i in range(len(players2))]
+        pprint.pprint(self.players1)
+        pprint.pprint(self.players2)
 
         self.team1 = team.Team(team1, self.players1, 30, HEIGHT - 130, 110, 374)
         self.team2 = team.Team(team2, self.players2, 565, HEIGHT - 130, 590, 374)
@@ -38,9 +42,9 @@ class Table:
         if self.time_out_timer is not None and self.time_out_timer.finished:
             self.time_out_timer = None
             self.timer.start()
-            __class__.update_players_timers("start", self.get_players())
+            Table.update_players_timers("start", self.get_players())
         if self.timer.finished:
-            __class__.update_players_timers("release", self.get_players())
+            Table.update_players_timers("release", self.get_players())
         self.team1.update()
         self.team2.update()
 
@@ -129,6 +133,6 @@ class Table:
         self.game_round += x
 
 
-def prepare_table(*args):
+def prepare_table(time: int, players1: list, players2: list, team1: str, team2: str, players1_numbers: list, players2_numbers: list):
     global table
-    table = Table(*args)
+    table = Table(time, players1, players2, team1, team2, players1_numbers, players2_numbers)

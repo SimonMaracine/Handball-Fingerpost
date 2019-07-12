@@ -32,6 +32,9 @@ class Player:
         self.suspend_timer = None  # player timer
         self.selected = False
 
+    def __repr__(self):
+        return "{} ({}) - {}".format(self.name, self.team_side, self.id)
+
     def render(self, y: int):
         self.update(y)
         self.button.render(False)
