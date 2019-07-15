@@ -8,7 +8,7 @@ from src.player import Player
 from src.player_panel import PlayerPanel
 from src.config import WIDTH, HEIGHT, ring_sound
 
-table = None
+tab = None
 
 
 class Table:
@@ -134,5 +134,5 @@ class Table:
 
 
 def prepare_table(time: int, players1: list, players2: list, team1: str, team2: str, players1_numbers: list, players2_numbers: list):
-    global table
-    table = Table(time, players1, players2, team1, team2, players1_numbers, players2_numbers)
+    global tab
+    tab = Table(time, players1, players2, team1, team2, players1_numbers, players2_numbers)

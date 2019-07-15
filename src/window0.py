@@ -199,6 +199,7 @@ def start():
 
     @window0.event
     def on_mouse_release(x, y, button, modifiers):
+        global window0, widgets, batch, focus
         for widget in widgets:
             if widget.hit_test(x, y):
                 set_focus(widget)
@@ -218,6 +219,8 @@ def start():
             if start_table():  # open the actual table interface thingy what am I saying
                 save_configuration()
                 window0.close()
+                del window0
+                del widgets, batch, focus
 
     @window0.event
     def on_mouse_drag(x, y, dx, dy, buttons, modifiers):
@@ -241,6 +244,7 @@ def start():
 
     @window0.event
     def on_key_release(symbol, modifiers):
+        global window0, widgets, batch, focus
         if symbol == pyglet.window.key.TAB:
             if modifiers & pyglet.window.key.MOD_SHIFT:
                 direction = -1
@@ -258,6 +262,8 @@ def start():
             if start_table():  # open the actual table interface thingy... what am I saying
                 save_configuration()
                 window0.close()
+                del window0
+                del widgets, batch, focus
         elif symbol == pyglet.window.key.ESCAPE:
             pyglet.app.exit()
 

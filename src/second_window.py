@@ -1,7 +1,7 @@
 import pyglet
 from pyglet.window import key
 
-from src.table import Table, table
+import src.table as table
 import src.config as config
 from src.config import WIDTH, HEIGHT, icon1, icon2, background
 
@@ -16,14 +16,14 @@ def start():
     def on_draw():
         second_window.clear()
         background.blit(0, 0)
-        table.team1.render()
-        table.team2.render()
-        table.show_timers()
-        table.show_round()
-        Table.show_players(table.get_players("left"), False)
-        Table.show_players(table.get_players("right"), False)
-        Table.show_suspended_players(table.get_players("left"))
-        Table.show_suspended_players(table.get_players("right"))
+        table.tab.team1.render()
+        table.tab.team2.render()
+        table.tab.show_timers()
+        table.tab.show_round()
+        table.Table.show_players(table.tab.get_players("left"), False)
+        table.Table.show_players(table.tab.get_players("right"), False)
+        table.Table.show_suspended_players(table.tab.get_players("left"))
+        table.Table.show_suspended_players(table.tab.get_players("right"))
 
     @second_window.event
     def on_key_release(symbol, modifiers):

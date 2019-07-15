@@ -24,3 +24,5 @@ img5 = image.load(join("gfx", "arrow_button2.png"))
 
 ring_sound = media.load(join("sounds", "sound.wav"), streaming=False)
 font.add_file(join("fonts", "open-sans", "OpenSans-Regular.ttf"))
+
+# del join, image, media, font
