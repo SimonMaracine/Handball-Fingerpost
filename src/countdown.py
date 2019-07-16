@@ -5,12 +5,15 @@ class Timer:
 
     player = pyglet.media.Player()
 
-    def __init__(self, x: int, y: int, size: int, time: int = 1200, sound=None):
+    def __init__(self, x: int, y: int, size: int, time: int = 1200, sound=None, play_beginning=True, play_end=True, play_10=True):
         self.x = x
         self.y = y
         self.size = size
         self.time = time
         self.sound = sound
+        self.play_beginning = play_beginning
+        self.play_end = play_end
+        self.play_10 = play_10
         self.countdown = self.time
         self.running = False  # for 'starting' the timer only once
         self.finished = False
@@ -34,12 +37,12 @@ class Timer:
         self.timer.y = self.y
 
         if self.countdown > 0:
-            if self.countdown == 10 and self.sound is not None:
+            if self.countdown == 10 and self.sound is not None and self.play_10:
                 Timer.player.queue(self.sound)
                 Timer.player.play()
             self.countdown -= 1
         else:
-            if self.sound is not None:
+            if self.sound is not None and self.play_end:
                 Timer.player.queue(self.sound)
                 Timer.player.play()
             self.finished = True
@@ -51,6 +54,9 @@ class Timer:
         if not self.running:
             pyglet.clock.schedule_interval(self.update, 0.999)
             self.running = True
+            if self.sound is not None and self.play_beginning:
+                Timer.player.queue(self.sound)
+                Timer.player.play()
 
     def set_time(self, time: int = 1200):
         self.countdown = time
@@ -68,4 +74,4 @@ class Timer:
         self.finished = False
         self.pause()
         if self.sound is not None:
-            Timer.player.delete()
+            Timer.player.delete()  # todo watch this

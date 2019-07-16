@@ -123,7 +123,8 @@ def start():
             elif buttons[2].pressed(x, y):
                 if table.tab.timer.running:
                     table.tab.team1.request_time_out()
-                    table.tab.time_out_timer = countdown.Timer(WIDTH // 2 - 94, HEIGHT // 2 + 185, 55, 60, ring_sound)  # 1 minute countdown
+                    table.tab.time_out_timer = countdown.Timer(WIDTH // 2 - 94, HEIGHT // 2 + 185, 55, 60,
+                                                               ring_sound, play_10=False, play_end=False)  # 1 minute countdown
                     table.tab.timer.pause()
                     table.tab.update_players_timers("pause", table.tab.get_players())
                 if table.tab.time_out_timer is not None:
@@ -131,7 +132,8 @@ def start():
             elif buttons[3].pressed(x, y):
                 if table.tab.timer.running:
                     table.tab.team2.request_time_out()
-                    table.tab.time_out_timer = countdown.Timer(WIDTH // 2 - 94, HEIGHT // 2 + 185, 55, 60, ring_sound)  # 1 minute countdown
+                    table.tab.time_out_timer = countdown.Timer(WIDTH // 2 - 94, HEIGHT // 2 + 185, 55, 60,
+                                                               ring_sound, play_10=False, play_end=False)  # 1 minute countdown
                     table.tab.timer.pause()
                     table.tab.update_players_timers("pause", table.tab.get_players())
                 if table.tab.time_out_timer is not None:
