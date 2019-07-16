@@ -56,33 +56,18 @@ def start():
                     table.tab.time_out_timer.pause()
                 else:
                     table.tab.time_out_timer.start()
-        elif symbol == key.A:
-            table.tab.advance_round(1)
-        elif symbol == key.Z:
-            table.tab.advance_round(-1)
-        elif symbol == key.T:
-            if table.tab.timer.running:
-                table.tab.team1.request_time_out()
-                table.tab.time_out_timer = countdown.Timer(WIDTH//2 - 94, HEIGHT//2 + 185, 55, 60, ring_sound)  # 1 minute countdown
-                table.tab.timer.pause()
-                table.tab.update_players_timers("pause", table.tab.get_players())
-            if table.tab.time_out_timer is not None:
-                table.tab.time_out_timer.start()
-        elif symbol == key.Y:
-            if table.tab.timer.running:
-                table.tab.team2.request_time_out()
-                table.tab.time_out_timer = countdown.Timer(WIDTH//2 - 94, HEIGHT//2 + 185, 55, 60, ring_sound)  # 1 minute countdown
-                table.tab.timer.pause()
-                table.tab.update_players_timers("pause", table.tab.get_players())
-            if table.tab.time_out_timer is not None:
-                table.tab.time_out_timer.start()
         elif symbol == key.R:
             if table.tab.timer.finished:
                 table.tab.advance_round(1)
                 table.tab.timer.restart()
             else:
                 table.tab.timer.restart()
-                table.tab.time_out_timer = None
+                try:
+                    table.tab.time_out_timer.restart()
+                except AttributeError:
+                    pass
+                else:
+                    table.tab.time_out_timer = None
                 table.tab.update_players_timers("release", table.tab.get_players())
         elif symbol == key.F:
             if not fullscreen:
@@ -128,7 +113,12 @@ def start():
                     table.tab.timer.restart()
                 else:
                     table.tab.timer.restart()
-                    table.tab.time_out_timer = None
+                    try:
+                        table.tab.time_out_timer.restart()
+                    except AttributeError:
+                        pass
+                    else:
+                        table.tab.time_out_timer = None
                     table.tab.update_players_timers("release", table.tab.get_players())
             elif buttons[2].pressed(x, y):
                 if table.tab.timer.running:

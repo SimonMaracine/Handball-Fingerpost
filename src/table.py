@@ -41,8 +41,8 @@ class Table:
     def update(self, dt):
         if self.time_out_timer is not None and self.time_out_timer.finished:
             self.time_out_timer = None
-            self.timer.start()
-            Table.update_players_timers("start", self.get_players())
+            # self.timer.start()
+            # Table.update_players_timers("start", self.get_players())
         if self.timer.finished:
             Table.update_players_timers("release", self.get_players())
         self.team1.update()
@@ -84,7 +84,7 @@ class Table:
             players = list(filter(lambda player: not player.disqualified, self.players1 + self.players2))
         return players
 
-    def update_player_functionality(self, x, y):
+    def update_player_functionality(self, x: int, y: int):
         players = self.get_players("remained")
         player_buttons = list(map(lambda player: player.get_button(), players))
 
