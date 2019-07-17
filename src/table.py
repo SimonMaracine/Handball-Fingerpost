@@ -92,6 +92,7 @@ class Table:
             if self.player_panel.update(x, y, self.timer):
                 return  # to not check for other buttons bellow the panel
 
+        des = False  # random flag... This is fine
         for i, btn in enumerate(player_buttons):
             if btn.pressed(x, y):
                 # print("player {}".format(i + 1))
@@ -103,8 +104,9 @@ class Table:
                         Player.de_select(players, i)  # de-select previous clicked player
                 else:
                     self.player_panel = None
-                break
-        else:
+                des = True
+
+        if not des:
             Player.de_select(players)
             self.player_panel = None
 

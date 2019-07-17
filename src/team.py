@@ -3,7 +3,7 @@ import pyglet
 
 class Team:
 
-    def __init__(self, name, players, name_x, name_y, score_x, score_y):
+    def __init__(self, name: str, players: list, name_x: int, name_y: int, score_x: int, score_y: int):
         self.name = name
         self.players = players
         self.score = 0

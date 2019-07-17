@@ -4,7 +4,8 @@ import src.draw as draw
 
 class Button:
 
-    def __init__(self, x: int, y: int, text: str, size: int, color=(255, 255, 255, 255), bold=False, bigger=False, secondary_color=(0, 0, 0, 255), image=None):
+    def __init__(self, x: int, y: int, text: str, size: int, color=(255, 255, 255, 255), bold=False, bigger=False,
+                 secondary_color=(0, 0, 0, 255), image=None):
         self.x = x
         self.y = y
         self.text = text

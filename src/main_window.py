@@ -146,7 +146,8 @@ def start():
     @main_window.event
     def on_mouse_motion(x, y, dx, dy):  # to update buttons' visuals
         for button in map(lambda player: player.get_button(), table.tab.get_players("remained")):
-            button.pressed(x, y)
+            if table.tab.player_panel is None:
+                button.pressed(x, y)
         if table.tab.player_panel:
             for button in table.tab.player_panel.get_buttons():
                 button.pressed(x, y)
