@@ -101,7 +101,7 @@ class Player:
             return "released"
 
     def update_button(self, x: int, y: int):
-        self.button = Button(x - 2, y - 4, "{}[{}]".format(self.name, self.id), 16, (255, 255, 255, 255), False, False, (140, 140, 140, 255))
+        self.button = Button(x - 2, y - 4, "{}[{}]".format(self.name, self.id), 16, secondary_color=(140, 140, 140, 255))
 
     def get_button(self):
         return self.button

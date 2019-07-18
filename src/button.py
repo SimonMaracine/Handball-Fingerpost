@@ -4,7 +4,7 @@ import src.draw as draw
 
 class Button:
 
-    def __init__(self, x: int, y: int, text: str, size: int, color=(255, 255, 255, 255), bold=False, bigger=False,
+    def __init__(self, x: int, y: int, text: str, size: int, color=(255, 255, 255, 255), bold=False,
                  secondary_color=(0, 0, 0, 255), image=None):
         self.x = x
         self.y = y
@@ -12,7 +12,6 @@ class Button:
         self.size = size
         self.color = color
         self.bold = bold
-        self.bigger = bigger
         self.secondary_color = secondary_color
         self.image = image
         self.button_text = pyglet.text.Label(self.text, font_name="Open Sans", font_size=self.size,
@@ -35,8 +34,8 @@ class Button:
         self.button_text.draw()
 
     def pressed(self, x: int, y: int) -> bool:
-        if self.x + self.width > x > self.x:
-            if self.y + self.height - (5 if self.bigger else 0) > y > self.y - (5 if self.bigger else 0):
+        if self.x + self.width + 4 > x > self.x:
+            if self.y + self.height > y > self.y - 1:
                 self.highlight = True
                 return True
         self.highlight = False
